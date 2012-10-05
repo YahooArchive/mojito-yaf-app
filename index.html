@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<!-- ================================================================= -->
+<!--
+NAME: index.html
+AUTH: William J Edney (wje)
+NOTE: Copyright (C) 2012 Yahoo! Inc.
+-->
+<!-- ================================================================= -->
+
+<html>
+  <head>
+
+    <title>A Mojito / YAF integration test project</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <style type="text/css">
+      #Message
+      {
+        position: absolute;
+        border: solid 1px black;
+
+        left: 10%;
+        right: 10%;
+        bottom: 0px;
+
+        height: 2em;
+      }
+    </style>
+
+    <!-- The fully minified version of YUI -->
+    <script type="text/javascript" src="http://yui.yahooapis.com/3.7.2/build/yui/yui-min.js"></script>
+
+    <!-- The debug version of YUI -->
+    <!--
+    <script type="text/javascript">
+      //  Put YUI in debug mode so that we can step through it.
+      YUI_config = {filter: 'debug', useConsoleOutput: true};
+    </script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/3.7.2/build/yui/yui-debug.js"></script>
+    -->
+
+    <script type="text/javascript" src="./scripts/mojitoDriver.js"></script>
+    <script type="text/javascript" src="./scripts/mojitoMojits.js"></script>
+    <script type="text/javascript" src="./scripts/mojitoTest.js"></script>
+    <script type="text/javascript">
+      YUI().use(['app', 'mojitoDriver', 'testMojit1', 'mojitoTest'], function (Y) {
+          var app = new Y.App();
+          Y.appObj = app;
+
+          Y.mojito.mojitoDriver.init();
+
+          //  This may be poor form...
+          window.Y = Y;
+      });
+    </script>
+
+  </head>
+  <body>
+    <button onclick="window.Y.mojito.mojitoTest.test1()">Dispatch to mojit #1</button>
+    <span id="Message"></span>
+  </body>
+</html>
