@@ -3,7 +3,11 @@
  * Copyrights licensed under the New BSD License.
  * See the accompanying LICENSE file for terms.
  */
-YUI().use('mojitoDriver', 'testMojit1', 'test', 'app', function (Y) {
+YUI({
+useConsoleOutput: true,
+useBrowserConsole: true,
+logInclude: { TestRunner: true }
+}).use('mojitoDriver', 'testMojit1', 'node', 'node-event-simulate', 'test', 'app', function (Y) {
 
     var suite = new Y.Test.Suite('mojito-dispatch tests'),
         A = Y.Assert,

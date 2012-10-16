@@ -1,0 +1,27 @@
+[
+    {
+        "settings": [ "master" ],
+
+        "name" : "mojito-yaf",
+
+        "commonlib" : "",
+
+        "config" :{
+            "baseUrl" : "http://localhost/~bedney/mojito-yaf"
+        },
+
+        "dataprovider" : { 
+            "initial_test" : {
+                 "params" : {
+                     "test" : "test-dispatch.js",
+                     "page" : "$$config.baseUrl$$/index"
+                }
+            }
+        }
+    },
+
+    {
+        "settings": [ "environment:development" ]
+    }
+
+]
