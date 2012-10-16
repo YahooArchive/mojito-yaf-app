@@ -30,35 +30,50 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
     </style>
 
     <!-- The fully minified version of YUI -->
-    <script type="text/javascript" src="http://yui.yahooapis.com/3.7.2/build/yui/yui-min.js"></script>
+    <!--<script type="text/javascript"
+      src="http://yui.yahooapis.com/3.7.2/build/yui/yui-min.js"></script>-->
 
     <!-- The debug version of YUI -->
-    <!--
     <script type="text/javascript">
       //  Put YUI in debug mode so that we can step through it.
       YUI_config = {filter: 'debug', useConsoleOutput: true};
     </script>
     <script type="text/javascript" src="http://yui.yahooapis.com/3.7.2/build/yui/yui-debug.js"></script>
-    -->
 
     <script type="text/javascript" src="./scripts/mojitoDriver.js"></script>
     <script type="text/javascript" src="./scripts/mojitoMojits.js"></script>
     <script type="text/javascript" src="./scripts/mojitoTest.js"></script>
+
+    <script type="text/javascript" src="./tests/test-dispatch.js"></script>
+
     <script type="text/javascript">
-      YUI().use(['app', 'mojitoDriver', 'testMojit1', 'mojitoTest'], function (Y) {
-          var app = new Y.App();
-          Y.appObj = app;
+      YUI().use(['event', 'test'], function (Y) {
 
-          Y.mojito.mojitoDriver.init();
+          var button = Y.one('#RunTestButton');
 
-          //  This may be poor form...
-          window.Y = Y;
+          button.on('click', function (e) {
+            var runner = Y.Test.Runner;
+
+            alert('got here');
+
+            runner.subscribe(runner.TEST_PASS_EVENT,
+              function (data) {
+                alert('Test: ' + data.testName + ' passed.');
+                });
+
+            runner.subscribe(runner.TEST_FAIL_EVENT,
+              function (data) {
+                alert('Test: ' + data.testName + ' failed. Msg: ' + data.error.message);
+             });
+
+            runner.run();
+            });
       });
     </script>
 
   </head>
   <body>
-    <button onclick="window.Y.mojito.mojitoTest.test1()">Dispatch to mojit #1</button>
+    <button id="RunTestButton">Run tests</button>
     <span id="Message"></span>
   </body>
 </html>
