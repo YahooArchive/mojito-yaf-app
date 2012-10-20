@@ -42,10 +42,13 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
     <script type="text/javascript" src="http://yui.yahooapis.com/3.7.2/build/yui/yui-debug.js"></script>
     -->
 
-    <script type="text/javascript" src="./scripts/mojitoDriver.js"></script>
-    <script type="text/javascript" src="./scripts/mojitoMojits.js"></script>
-    <script type="text/javascript" src="./scripts/mojitoTest.js"></script>
+    <script type="text/javascript" src="./scripts/mojito-yaf.js"></script>
 
+    <script type="text/javascript">
+      YUI().use('mojito-yaf', function (Y) {
+          //debugger;
+      });
+    </script>
   </head>
   <body>
     <span id="Message"></span>
