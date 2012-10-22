@@ -1,10 +1,6 @@
 YUI.add('mojito-yaf', function (Y, NAME) {
 
-    function App() {
-        App.superclass.constructor.apply(this);
-    }
-
-    Y.extend(App, Y.Base,
+    Y.namespace('mojito').App = Y.Base.create('App', Y.Base, [],
         {
             _yApp: null,
             router: null,
@@ -21,31 +17,9 @@ YUI.add('mojito-yaf', function (Y, NAME) {
         }
     );
 
-    Y.namespace('mojito').App = App;
-
     //  ---
 
-    function Controller() {
-        Controller.superclass.constructor.apply(this);
-    }
-
-    Y.extend(Controller, Y.Base,
-        {
-            init: function () {
-                alert('got to the Controller::init function');
-            }
-        }
-    );
-
-    Y.namespace('mojito').Controller = Controller;
-
-    //  ---
-
-    function Router(mApp) {
-        Router.superclass.constructor.apply(this, [mApp]);
-    }
-
-    Y.extend(Router, Y.Base,
+    Y.namespace('mojito').Router = Y.Base.create('Router', Y.Base, [],
         {
             mApp: null,
 
@@ -72,7 +46,8 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                     mojitName = mojitParts[0];
                     mojitAction = mojitParts[1];
 
-                    targetMojit = Y.mojito[mojitName]();
+                    //targetMojit = new Y.mojito[mojitName]();
+                    targetMojit = new Y.mojito[mojitName];
 
                     //  Dispatch to the mojit. Right now a Function call, but
                     //  that'll need to change - heh ;-)
@@ -101,22 +76,56 @@ YUI.add('mojito-yaf', function (Y, NAME) {
         }
     );
 
-    Y.namespace('mojito').Router = Router;
-
     //  ---
 
-    function Mojit() {
-        Mojit.superclass.constructor.apply(this);
-    }
-
-    Y.extend(Mojit, Y.Base,
+    Y.namespace('mojito').Model = Y.Base.create('Model', Y.Model, [],
         {
             init: function () {
-                alert('got to the Mojit::init function');
             }
         }
     );
 
-    Y.namespace('mojito').Mojit = Mojit;
+    //  ---
+
+    Y.namespace('mojito').View = Y.Base.create('View', Y.View, [],
+        {
+            initializer: function () {
+                var model = this.get('model');
+
+                model.after('change', this.render, this);
+            }
+        }
+    );
+
+    //  ---
+
+    Y.namespace('mojito').Controller = Y.Base.create('Controller', Y.Base, [],
+        {
+            init: function () {
+                alert('got to the Controller::init function');
+            }
+        }
+    );
+
+    //  ---
+
+    Y.namespace('mojito').Mojit = Y.Base.create('Mojit', Y.Base, [],
+        {
+            id: null,
+
+            models: null,
+            views: null,
+            controller: null,
+
+            init: function (id) {
+                this.set('id', id);
+
+                this.set('models', {});
+                this.set('views', {});
+
+                this.set('container', Y.Node.create('<div id="' + id + '" class="mojit"/>'));
+            }
+        }
+    );
 
 }, '0.0.1', {requires: ['base', 'app']});
