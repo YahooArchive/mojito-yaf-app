@@ -6,40 +6,48 @@
 
 YUI.add('mojito-test-mojits', function (Y, NAME) {
 
-    Y.namespace('mojito').TestMojit1 = Y.Base.create('TestMojit1', Y.mojito.Mojit, [],
-        {
-            init: function(id) {
-                this.constructor.superclass.init.apply(this, arguments);
-
-                console.log('id at TestMojit1: ' + id);
-
-                this.get('models')['index'] = new Y.Model({'msg': 'Howdy!'});
-                this.get('views')['index'] = new Y.mojito.TestView1({model: this.get('models')['index']});
-            },
-            index: function() {
-                this.get('models')['index'].set('msg', 'Hey pal!');
-            }
-        }
-    );
-
     Y.namespace('mojito').TestView1 = Y.Base.create('TestView1', Y.mojito.View, [],
         {
-            init: function() {
-                this.constructor.superclass.init.apply(this, arguments);
+            initializer: function() {
+                //  Regular Y.Lang sub template
+                //this.set('template', 'The msg is: {msg}');
 
-                this.set('template', 'The msg is: {msg}');
+                //  Handlebars template
+                this.set('template', 'The msg is: {{msg}}');
             },
             render: function() {
+                var container;
                 var html;
-                var container = this.get('container');
 
-                html = Y.Lang.sub(this.get('template'), this.get('model').toJSON());
+                container = this.get('container');
+                html = this.constructor.superclass.render.apply(this);
 
-                //container.setHTML(html);
+                container.setHTML(html);
 
                 if (!container.inDoc()) {
                     Y.one('body').append(container);
                 }
+            }
+        }
+    );
+
+    Y.namespace('mojito').TestMojit1 = Y.Base.create('TestMojit1', Y.mojito.Mojit, [],
+        {
+            initializer: function() {
+                var msgModel;
+               
+                msgModel = new Y.Model({'msg': 'Howdy!'});
+
+                this.get('models')['index'] = msgModel;
+
+                this.get('views')['index'] =
+                    new Y.mojito.TestView1({model: msgModel});
+
+                this.get('views')['index'].set('renderer',
+                    new Y.mojito.HandlebarsRenderer());
+            },
+            index: function() {
+                this.get('models')['index'].set('msg', 'Hey pal!');
             }
         }
     );
@@ -66,7 +74,7 @@ logInclude: { TestRunner: true }
             Y.mApp = new Y.mojito.App();
             msg = Y.one('#Message');
 
-            Y.mojito.testMojit1 = new Y.mojito.TestMojit1('testMojit1');
+            Y.mojito.testMojit1 = new Y.mojito.TestMojit1({id: 'testMojit1'});
         },
 
         tearDown: function() {
