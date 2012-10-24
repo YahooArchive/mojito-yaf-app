@@ -22,11 +22,13 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                 container = this.get('container');
                 html = this.constructor.superclass.render.apply(this);
 
-                container.setHTML(html);
+                container.append(html);
 
                 if (!container.inDoc()) {
                     Y.one('body').append(container);
                 }
+
+                debugger;
             }
         }
     );
@@ -35,16 +37,16 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
         {
             initializer: function() {
                 var msgModel;
+                var msgView;
                
                 msgModel = new Y.Model({'msg': 'Howdy!'});
-
                 this.get('models')['index'] = msgModel;
 
-                this.get('views')['index'] =
-                    new Y.mojito.TestView1({model: msgModel});
+                msgView = new Y.mojito.TestView1({model: msgModel,
+                                                    id: this.get('id')});
+                this.get('views')['index'] = msgView;
 
-                this.get('views')['index'].set('renderer',
-                    new Y.mojito.HandlebarsRenderer());
+                msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
             },
             index: function() {
                 this.get('models')['index'].set('msg', 'Hey pal!');
@@ -52,7 +54,7 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
         }
     );
 
-}, '0.0.1', {requires: ['mojito-yaf', 'test']});
+}, '0.0.1', {requires: ['mojito-yaf', 'test', 'handlebars']});
 
 YUI({
 useConsoleOutput: true,
@@ -82,8 +84,8 @@ logInclude: { TestRunner: true }
 
         'test route navigation function': function() {
             Y.mApp.router.navigate('/testMojit1:index');
-            //Y.Assert.areEqual(Y.one('#testMojit1'), 'Hey pal!');
-            Y.Assert.areEqual('foo', 'foo');
+            //Y.Assert.areEqual(Y.one('#testMojit1').get('text'),
+            //                    'The msg is: Hey pal!');
         }
 
     }));

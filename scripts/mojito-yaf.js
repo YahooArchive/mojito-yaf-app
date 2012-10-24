@@ -77,37 +77,26 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     //  ---
 
-    Y.namespace('mojito').Renderer = Y.Base.create('Renderer', Y.Base, [],
+    Y.namespace('mojito').Template = Y.Base.create('Template', Y.Base, [],
         {
-            execute: function (template, data) {
-                //  Abstract super method
-            }
-        }
-    );
+            _renderer: null,
 
-    //  ---
+            init : function (renderer) {
 
-    Y.namespace('mojito').StandardRenderer = Y.Base.create('StandardRenderer', Y.mojito.Renderer, [],
-        {
-            execute: function (template, data) {
-                return Y.Lang.sub(template, data);
-            }
-        }
-    );
+                var templateRenderer
 
-    //  ---
-
-    Y.namespace('mojito').HandlebarsRenderer = Y.Base.create('HandlebarsRenderer', Y.mojito.Renderer, [],
-        {
-            execute: function (template, data) {
-                var templateFunc;
-
-                templateFunc = Handlebars.compile(template);
-
-                //  If we got a valid template Function
-                if (typeof(templateFunc) == 'function') {
-                    return templateFunc(data);
+                if (!(templateRenderer = renderer)) {
+                    templateRenderer = {render:
+                                         function (template, data) {
+                                            return Y.Lang.sub(template, data);
+                                            }
+                                         };
                 }
+
+                this.set('_renderer', templateRenderer);
+            },
+            render: function (template, data) {
+                return this.get('_renderer').render(template, data);
             }
         }
     );
@@ -116,18 +105,18 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     Y.namespace('mojito').View = Y.Base.create('View', Y.View, [],
         {
-            //  By default, we use a Y.mojito.StandardRenderer
-            renderer: new Y.mojito.StandardRenderer(),
+            templateObj: new Y.mojito.Template(),
 
-            initializer: function () {
+            initializer: function (params) {
                 var model = this.get('model');
 
-                this.set('renderer', new Y.mojito.StandardRenderer());
-
                 model.after('change', this.render, this);
+
+                this.set('container', Y.Node.create('<div id="' + params.id + '" class="mojit"></div>'));
             },
             render: function () {
-                return this.get('renderer').execute(this.get('template'),
+                return this.get('templateObj').render(
+                                                    this.get('template'),
                                                     this.get('model').toJSON());
             }
         }
@@ -137,8 +126,8 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     Y.namespace('mojito').Controller = Y.Base.create('Controller', Y.Base, [],
         {
-            init : function () {
-                alert('got to the Controller::init function');
+            initializer : function (params) {
+                alert('got to the Controller::initializer function');
             }
         }
     );
@@ -161,8 +150,6 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
                 this.set('models', {});
                 this.set('views', {});
-
-                this.set('container', Y.Node.create('<div id="' + id + '" class="mojit"/>'));
             }
         }
     );

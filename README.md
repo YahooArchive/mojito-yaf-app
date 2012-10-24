@@ -12,11 +12,9 @@ This app is tested using Arrow and Selenium.
 
 2. Run Selenium server from command line #1:
 
-    Firefox: java -Dwebdriver.firefox.profile=default -jar /usr/local/s
-rc/selenium/selenium-server-standalone-2.25.0.jar
+    Firefox: java -Dwebdriver.firefox.profile=default -jar /usr/local/src/selenium/selenium-server-standalone-2.25.0.jar
 
-    Chrome: java -Dwebdriver.chrome.profile=default -jar /usr/local/src
-/selenium/selenium-server-standalone-2.25.0.jar
+    Chrome: java -Dwebdriver.chrome.profile=default -jar /usr/local/src/selenium/selenium-server-standalone-2.25.0.jar
 
 3. Run Arrow server from command line #2:
 
