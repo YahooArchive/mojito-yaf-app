@@ -14,21 +14,6 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
                 //  Handlebars template
                 this.set('template', 'The msg is: {{msg}}');
-            },
-            render: function() {
-                var container;
-                var html;
-
-                container = this.get('container');
-                html = this.constructor.superclass.render.apply(this);
-
-                container.append(html);
-
-                if (!container.inDoc()) {
-                    Y.one('body').append(container);
-                }
-
-                debugger;
             }
         }
     );

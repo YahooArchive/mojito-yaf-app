@@ -77,6 +77,9 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     //  ---
 
+    //  This class is a temporary mock up of the upcoming Y.template
+    //  functionality.
+
     Y.namespace('mojito').Template = Y.Base.create('Template', Y.Base, [],
         {
             _renderer: null,
@@ -115,9 +118,19 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 this.set('container', Y.Node.create('<div id="' + params.id + '" class="mojit"></div>'));
             },
             render: function () {
-                return this.get('templateObj').render(
+                var container;
+                var html;
+
+                container = this.get('container');
+                html = this.get('templateObj').render(
                                                     this.get('template'),
                                                     this.get('model').toJSON());
+
+                container.append(html);
+
+                if (!container.inDoc()) {
+                    Y.one('body').append(container);
+                }
             }
         }
     );
