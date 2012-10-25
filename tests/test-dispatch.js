@@ -8,19 +8,30 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
     Y.namespace('mojito').TestView1 = Y.Base.create('TestView1', Y.mojito.View, [],
         {
-            initializer: function() {
+            eventBindings:
+                [
+                    '#setMsgButton', 'click', 'msgSet'
+                ],
+            initializer: function () {
                 //  Regular Y.Lang sub template
                 //this.set('template', 'The msg is: {msg}');
 
                 //  Handlebars template
                 this.set('template', 'The msg is: {{msg}}');
+            },
+            setupBindings: function () {
+                var container;
+
+                container = this.get('container');
+                Y.one('#setMsgButton').on('click',
+                    function () {this.fire('mojit:update')}.bind(this));
             }
         }
     );
 
     Y.namespace('mojito').TestMojit1 = Y.Base.create('TestMojit1', Y.mojito.Mojit, [],
         {
-            initializer: function() {
+            initializer: function () {
                 var msgModel;
                 var msgView;
                
@@ -29,12 +40,18 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
                 msgView = new Y.mojito.TestView1({model: msgModel,
                                                     id: this.get('id')});
-                this.get('views')['index'] = msgView;
-
                 msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
+                this.addViewForAction(msgView, 'index');
+
+                this.set('mojitEvents', ['mojit:update']);
+
+                this.setupEventObservations();
             },
-            index: function() {
+            index: function () {
                 this.get('models')['index'].set('msg', 'Hey pal!');
+            },
+            onMojitUpdate: function () {
+                console.log('got to mojit update');
             }
         }
     );
@@ -57,17 +74,17 @@ logInclude: { TestRunner: true }
 
         name: 'instantiation',
 
-        setUp: function() {
+        setUp: function () {
             Y.mApp = new Y.mojito.App();
             msg = Y.one('#Message');
 
             Y.mojito.testMojit1 = new Y.mojito.TestMojit1({id: 'testMojit1'});
         },
 
-        tearDown: function() {
+        tearDown: function () {
         },
 
-        'test route navigation function': function() {
+        'test route navigation function': function () {
             Y.mApp.router.navigate('/testMojit1:index');
             //Y.Assert.areEqual(Y.one('#testMojit1').get('text'),
             //                    'The msg is: Hey pal!');

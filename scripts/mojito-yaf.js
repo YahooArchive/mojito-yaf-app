@@ -5,12 +5,12 @@ YUI.add('mojito-yaf', function (Y, NAME) {
             _yApp: null,
             router: null,
 
-            init: function() {
+            init: function () {
                 this._yApp = new Y.App();
                 this.router = new Y.mojito.Router(this);
             },
 
-            logMessage: function(msg) {
+            logMessage: function (msg) {
                 Y.one('#Message').set('text', Y.one('#Message').get('text') +
                                                 ' || ' + msg);
             }
@@ -69,7 +69,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                     mApp.logMessage('Navigated to: ' + e.url);
                 });
             },
-            navigate: function(url) {
+            navigate: function (url) {
                 return this.mApp._yApp.navigate(url);
             }
         }
@@ -131,6 +131,9 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 if (!container.inDoc()) {
                     Y.one('body').append(container);
                 }
+            },
+            setupBindings: function () {
+               return;
             }
         }
     );
@@ -155,6 +158,8 @@ YUI.add('mojito-yaf', function (Y, NAME) {
             views: null,
             controller: null,
 
+            mojitEvents: null,
+
             initializer : function (params) {
 
                 var id = params.id;
@@ -163,7 +168,38 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
                 this.set('models', {});
                 this.set('views', {});
-            }
+            },
+            addViewForAction: function (viewObj, actionName) {
+                this.get('views')[actionName] = viewObj;
+                
+                //  Tell the view to set up its event bindings
+                viewObj.setupBindings();
+
+                //  Register to receive events 'bubbling' from our views
+                viewObj.addTarget(this);
+            },
+            setupEventObservations: function () {
+                var evts = this.get('mojitEvents');
+                var i;
+
+                var evtName;
+                var methodName;
+
+                for (i = 0; i < evts.length; i++) {
+                    evtName = evts[i];
+                    methodName = 'on' + evtName.replace(/(.+):(.+)/,
+                            function(whole, prefix, name) {
+                                return prefix[0].toUpperCase() +
+                                       prefix.slice(1) +
+                                       name[0].toUpperCase() +
+                                       name.slice(1);
+                            });
+
+                    console.log(methodName);
+
+                    this.on(evtName, this[methodName].bind(this));
+                }
+            },
         }
     );
 
