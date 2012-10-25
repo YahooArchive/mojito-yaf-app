@@ -108,6 +108,8 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     Y.namespace('mojito').View = Y.Base.create('View', Y.View, [],
         {
+            autoBindings: null,
+
             templateObj: new Y.mojito.Template(),
 
             initializer: function (params) {
@@ -118,8 +120,8 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 this.set('container', Y.Node.create('<div id="' + params.id + '" class="mojit"></div>'));
             },
             render: function () {
-                var container;
-                var html;
+                var container,
+                    html;
 
                 container = this.get('container');
                 html = this.get('templateObj').render(
@@ -133,6 +135,26 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 }
             },
             setupBindings: function () {
+
+                //  The default implementation of this method sets up a
+                //  Y.mojito.View's "autoBindings"
+                var autos = this.get('autoBindings'),
+                    i,
+
+                    mojitEvent;
+
+                for (i = 0; i < autos.length; i++) {
+
+                    //  Capture this outside of the nested function
+                    mojitEvent = autos[i].mojitEvent;
+
+                    Y.one(autos[i].selector).on(
+                            autos[i].domEvent,
+                            function () {
+                                this.fire(mojitEvent);
+                            }.bind(this));
+                }
+
                return;
             }
         }
@@ -179,11 +201,11 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 viewObj.addTarget(this);
             },
             setupEventObservations: function () {
-                var evts = this.get('mojitEvents');
-                var i;
+                var evts = this.get('mojitEvents'),
+                    i,
 
-                var evtName;
-                var methodName;
+                    evtName,
+                    methodName;
 
                 for (i = 0; i < evts.length; i++) {
                     evtName = evts[i];

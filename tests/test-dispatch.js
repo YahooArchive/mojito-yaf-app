@@ -8,23 +8,18 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
     Y.namespace('mojito').TestView1 = Y.Base.create('TestView1', Y.mojito.View, [],
         {
-            eventBindings:
-                [
-                    '#setMsgButton', 'click', 'msgSet'
-                ],
             initializer: function () {
                 //  Regular Y.Lang sub template
                 //this.set('template', 'The msg is: {msg}');
 
                 //  Handlebars template
                 this.set('template', 'The msg is: {{msg}}');
-            },
-            setupBindings: function () {
-                var container;
 
-                container = this.get('container');
-                Y.one('#setMsgButton').on('click',
-                    function () {this.fire('mojit:update')}.bind(this));
+                //  "Automatic" event bindings
+                this.set('autoBindings',
+                         [{selector: '#setMsgButton',
+                           domEvent: 'click',
+                           mojitEvent: 'mojit:update'}]);
             }
         }
     );
