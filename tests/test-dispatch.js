@@ -17,10 +17,21 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
                 //  "Automatic" event bindings
                 this.set('autoBindings',
-                         [{selector: '#setMsgButton',
+                         [{selector: '#saveMsgButton',
                            domEvent: 'click',
-                           mojitEvent: 'mojit:update'}]);
-            }
+                           mojitEvent: 'mojit:saveMsg'}]);
+            },
+            setupBindings: function () {
+                //  Make sure and set up the auto bindings
+                this.constructor.superclass.setupBindings.apply(this, arguments);
+
+                Y.one('#setMsgButton').on(
+                        'click',
+                        function () {
+                            this.fire('mojit:setMsg',
+                                      {msg: Y.one('#setMsgText').get('value')});
+                        }.bind(this));
+            },
         }
     );
 
@@ -31,22 +42,22 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                 var msgView;
                
                 msgModel = new Y.Model({'msg': 'Howdy!'});
-                this.get('models')['index'] = msgModel;
+                this.get('models')['msgHolder'] = msgModel;
 
                 msgView = new Y.mojito.TestView1({model: msgModel,
                                                     id: this.get('id')});
                 msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
-                this.addViewForAction(msgView, 'index');
+                this.addViewForAction(msgView, 'msgView');
 
-                this.set('mojitEvents', ['mojit:update']);
+                this.set('mojitEvents', ['mojit:setMsg', 'mojit:saveMsg']);
 
                 this.setupEventObservations();
             },
-            index: function () {
-                this.get('models')['index'].set('msg', 'Hey pal!');
+            onMojitSetMsg: function (evt) {
+                this.get('models')['msgHolder'].set('msg', evt.msg);
             },
-            onMojitUpdate: function () {
-                console.log('got to mojit update');
+            onMojitSaveMsg: function (evt) {
+                alert('save to model');
             }
         }
     );
