@@ -38,18 +38,6 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
     Y.namespace('mojito').MsgModel = Y.Base.create('MsgModel', Y.Model, [Y.ModelSync.Local],
         {
             root: 'mojito-test',
-
-            setupBindings: function () {
-                //  Make sure and set up the auto bindings
-                this.constructor.superclass.setupBindings.apply(this, arguments);
-
-                Y.one('#setMsgButton').on(
-                        'click',
-                        function () {
-                            this.fire('mojit:setMsg',
-                                      {msg: Y.one('#setMsgText').get('value')});
-                        }.bind(this));
-            }
         }
     );
 
