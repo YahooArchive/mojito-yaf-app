@@ -6,7 +6,7 @@
 
 YUI.add('mojito-test-mojits', function (Y, NAME) {
 
-    Y.namespace('mojito').TestView1 = Y.Base.create('TestView1', Y.mojito.View, [],
+    Y.namespace('mojito').MsgView = Y.Base.create('MsgView', Y.mojito.View, [],
         {
             initializer: function () {
                 //  Regular Y.Lang sub template
@@ -35,7 +35,7 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
         }
     );
 
-    Y.namespace('mojito').TestModel1 = Y.Base.create('TestModel1', Y.Model, [Y.ModelSync.Local],
+    Y.namespace('mojito').MsgModel = Y.Base.create('MsgModel', Y.Model, [Y.ModelSync.Local],
         {
             root: 'mojito-test',
 
@@ -53,16 +53,16 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
         }
     );
 
-    Y.namespace('mojito').TestMojit1 = Y.Base.create('TestMojit1', Y.mojito.Mojit, [],
+    Y.namespace('mojito').MsgMojit = Y.Base.create('MsgMojit', Y.mojito.Mojit, [],
         {
             initializer: function () {
                 var msgModel;
                 var msgView;
                
-                msgModel = new Y.mojito.TestModel1({msg: 'Howdy!'});
+                msgModel = new Y.mojito.MsgModel({msg: 'Howdy!'});
                 this.get('models')['msgHolder'] = msgModel;
 
-                msgView = new Y.mojito.TestView1({model: msgModel,
+                msgView = new Y.mojito.MsgView({model: msgModel,
                                                     id: this.get('id'),
                                                     mojit: this});
                 msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
@@ -110,17 +110,17 @@ logInclude: { TestRunner: true }
 
             //  create a new mojit - this will register itself using the DOM so
             //  that we can find it.
-            new Y.mojito.TestMojit1({id: 'testMojit1'});
+            var msgMojit = new Y.mojito.MsgMojit({id: 'msgMojit'});
 
-            Y.mApp.addMojitToRoutes(Y.mojito.testMojit1);
+            Y.mApp.addMojitToRoutes(msgMojit);
         },
 
         tearDown: function () {
         },
 
         'test route navigation function': function () {
-            Y.mApp.router.navigate('/testMojit1:index');
-            //Y.Assert.areEqual(Y.one('#testMojit1').get('text'),
+            Y.mApp.router.navigate('/msgMojit:index');
+            //Y.Assert.areEqual(Y.one('#msgMojit').get('text'),
             //                    'The msg is: Hey pal!');
         }
 

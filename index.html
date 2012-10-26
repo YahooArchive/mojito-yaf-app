@@ -50,11 +50,13 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
       YUI().use('mojito-yaf', 'mojito-test-mojits', function (Y) {
           Y.one('#navigateButton').on('click',
             function () {
-              Y.mApp = new Y.mojito.App();
-              new Y.mojito.TestMojit1({id:'testMojit1'});
-              Y.mApp.addMojitToRoutes(Y.mojito.testMojit1);
+              var msgMojit;
 
-              Y.mApp.router.navigate('/testMojit1:index');
+              Y.mApp = new Y.mojito.App();
+              msgMojit = new Y.mojito.MsgMojit({id:'msgMojit'});
+              Y.mApp.addMojitToRoutes(msgMojit);
+
+              Y.mApp.router.navigate('/msgMojit:index');
             });
           Y.one('#alertAllMojits').on('click',
             function () {
