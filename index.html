@@ -51,10 +51,15 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
           Y.one('#navigateButton').on('click',
             function () {
               Y.mApp = new Y.mojito.App();
-              Y.mojito.testMojit1 = new Y.mojito.TestMojit1({id:'testMojit1'});
+              new Y.mojito.TestMojit1({id:'testMojit1'});
               Y.mApp.addMojitToRoutes(Y.mojito.testMojit1);
 
               Y.mApp.router.navigate('/testMojit1:index');
+            });
+          Y.one('#alertAllMojits').on('click',
+            function () {
+              var stuff = Y.mojito.Mojit.findAllMojits();
+              alert(Object.keys(stuff));
             });
       });
     </script>
@@ -62,9 +67,16 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
   <body>
     <button id="navigateButton">Setup test and navigate mojit to 'index'</button>
     <br/>
+    <br/>
     <button id="setMsgButton">Set the msg to: </button><input id="setMsgText" type="text"/>
     <br/>
+    <br/>
     <button id="saveMsgButton">Save the msg</button>
+    <br/>
+    <br/>
+    <button id="alertAllMojits">Alert all mojits</button>
+    <br/>
+    <br/>
     <span id="Message"></span>
   </body>
 </html>

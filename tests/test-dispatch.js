@@ -63,7 +63,8 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                 this.get('models')['msgHolder'] = msgModel;
 
                 msgView = new Y.mojito.TestView1({model: msgModel,
-                                                    id: this.get('id')});
+                                                    id: this.get('id'),
+                                                    mojit: this});
                 msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
                 this.addViewForKey(msgView, 'msgView');
 
@@ -106,7 +107,11 @@ logInclude: { TestRunner: true }
             msg = Y.one('#Message');
 
             Y.mApp = new Y.mojito.App();
-            Y.mojito.testMojit1 = new Y.mojito.TestMojit1({id: 'testMojit1'});
+
+            //  create a new mojit - this will register itself using the DOM so
+            //  that we can find it.
+            new Y.mojito.TestMojit1({id: 'testMojit1'});
+
             Y.mApp.addMojitToRoutes(Y.mojito.testMojit1);
         },
 

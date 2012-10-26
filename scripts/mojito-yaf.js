@@ -74,7 +74,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
             init : function (renderer) {
 
-                var templateRenderer
+                var templateRenderer;
 
                 if (!(templateRenderer = renderer)) {
                     templateRenderer = {render:
@@ -96,17 +96,22 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     Y.namespace('mojito').View = Y.Base.create('View', Y.View, [],
         {
-            _mojit: null,
             autoBindings: null,
 
             templateObj: new Y.mojito.Template(),
 
             initializer: function (params) {
-                var model = this.get('model');
+                var model,
+                    container;
 
+                model = this.get('model');
                 model.after('change', this.render, this);
 
-                this.set('container', Y.Node.create('<div id="' + params.id + '" class="mojit"></div>'));
+                container = Y.Node.create('<div id="' + params.id + '" class="mojit"></div>');
+                Y.one('body').append(container);
+                container.getDOMNode()._mojit = params.mojit;
+
+                this.set('container', container);
             },
             render: function () {
                 var container,
@@ -116,23 +121,18 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 html = this.get('templateObj').render(
                                                     this.get('template'),
                                                     this.get('model').toJSON());
-
                 container.append(html);
-
-                if (!container.inDoc()) {
-                    Y.one('body').append(container);
-
-                    container.getDOMNode()._mojit = this.get('_mojit');
-                }
             },
             setupBindings: function () {
 
                 //  The default implementation of this method sets up a
                 //  Y.mojito.View's "autoBindings"
-                var autos = this.get('autoBindings'),
+                var autos,
                     i,
 
                     mojitEvent;
+
+                autos = this.get('autoBindings');
 
                 for (i = 0; i < autos.length; i++) {
 
@@ -175,9 +175,6 @@ YUI.add('mojito-yaf', function (Y, NAME) {
             addViewForKey: function (viewObj, keyName) {
                 this.get('views')[keyName] = viewObj;
 
-                //  Set a backreference to the mojit
-                viewObj.set('_mojit', this);
-
                 //  Tell the view to set up its event bindings
                 viewObj.setupBindings();
 
@@ -206,5 +203,23 @@ YUI.add('mojito-yaf', function (Y, NAME) {
             },
         }
     );
+
+    Y.mojito.Mojit.findAllMojits = function () {
+        var allMojitNodes,
+            allMojits;
+
+        allMojitNodes = Y.all('.mojit');
+
+        allMojits = {};
+
+        allMojitNodes.each(function (yNode) {
+                                var mojit;
+                                
+                                mojit = yNode.getDOMNode()._mojit;
+                                allMojits[mojit.get('id')] = mojit;
+                            });
+
+        return allMojits;
+    }
 
 }, '0.0.1', {requires: ['base', 'app']});
