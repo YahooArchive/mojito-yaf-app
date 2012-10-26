@@ -162,16 +162,6 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     //  ---
 
-    Y.namespace('mojito').Controller = Y.Base.create('Controller', Y.Base, [],
-        {
-            initializer : function (params) {
-                alert('got to the Controller::initializer function');
-            }
-        }
-    );
-
-    //  ---
-
     Y.namespace('mojito').Mojit = Y.Base.create('Mojit', Y.Base, [],
         {
             id: null,
@@ -191,7 +181,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 this.set('models', {});
                 this.set('views', {});
             },
-            addViewForAction: function (viewObj, actionName) {
+            addViewForKey: function (viewObj, actionName) {
                 this.get('views')[actionName] = viewObj;
                 
                 //  Tell the view to set up its event bindings
