@@ -10,6 +10,10 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 this.router = new Y.mojito.Router(this);
             },
 
+            addMojitToRoutes: function (aMojit) {
+                this.router.addMojitToRoutes(aMojit);
+            },
+
             logMessage: function (msg) {
                 Y.one('#Message').set('text', Y.one('#Message').get('text') +
                                                 ' || ' + msg);
@@ -25,49 +29,33 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
             init: function (mApp) {
 
-            var mojitNames = ['testMojit1'],
-                mojitActions = ['index'],
-                i;
-
                 this.mApp = mApp;
 
-                var mojitDispatcher = function (req, res, next) {
-                    var   fullMojitID,
-                          mojitParts,
-
-                          mojitName,
-                          mojitAction,
-        
-                          targetMojit;
-
-                    fullMojitID = req.path.slice(req.path.lastIndexOf('/') + 1);
-                    mojitParts = fullMojitID.split(':');
-
-                    mojitName = mojitParts[0];
-                    mojitAction = mojitParts[1];
-
-                    targetMojit = Y.mojito[mojitName];
-
-                    //  Dispatch to the mojit. Right now a Function call, but
-                    //  that'll need to change - heh ;-)
-                    targetMojit[mojitAction]();
-
-                    //  Call the next most-specific handler.
-                    next();
-                };
-
-                for (i=0; i < mojitNames.length; i++) {
-                    mApp._yApp.route('/' + mojitNames[i] + ':' + mojitActions[i],
-                                  mojitDispatcher);
-                }
-
-                mApp._yApp.route('*', function (req) {
-                    mApp.logMessage('Got to: ' + req.path);
-                });
+                //  Add a generic route for mojit dispatching
+                this.mApp._yApp.route('/*mojitID:*action',
+                              this.dispatchToMojit.bind(this));
 
                 mApp._yApp.on('navigate', function (e) {
                     mApp.logMessage('Navigated to: ' + e.url);
                 });
+            },
+            addMojitToRoutes: function (aMojit) {
+                //  Add the mojit as an event target
+                this.addTarget(aMojit);
+            },
+            dispatchToMojit: function (req, res, next) {
+                var mojitID,
+                    mojitAction;
+
+                //  Right now, mojitID is unused... do we need it?
+                mojitID = req.params.mojitID;
+                mojitAction = req.params.action;
+
+                //  Fire an event - the mojits should be listening
+                this.fire('mojit:' + mojitAction);
+
+                //  Call the next most-specific handler.
+                next();
             },
             navigate: function (url) {
                 return this.mApp._yApp.navigate(url);
@@ -108,6 +96,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     Y.namespace('mojito').View = Y.Base.create('View', Y.View, [],
         {
+            _mojit: null,
             autoBindings: null,
 
             templateObj: new Y.mojito.Template(),
@@ -132,6 +121,8 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
                 if (!container.inDoc()) {
                     Y.one('body').append(container);
+
+                    container.getDOMNode()._mojit = this.get('_mojit');
                 }
             },
             setupBindings: function () {
@@ -181,9 +172,12 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 this.set('models', {});
                 this.set('views', {});
             },
-            addViewForKey: function (viewObj, actionName) {
-                this.get('views')[actionName] = viewObj;
-                
+            addViewForKey: function (viewObj, keyName) {
+                this.get('views')[keyName] = viewObj;
+
+                //  Set a backreference to the mojit
+                viewObj.set('_mojit', this);
+
                 //  Tell the view to set up its event bindings
                 viewObj.setupBindings();
 
@@ -206,8 +200,6 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                                        name[0].toUpperCase() +
                                        name.slice(1);
                             });
-
-                    console.log(methodName);
 
                     this.on(evtName, this[methodName].bind(this));
                 }

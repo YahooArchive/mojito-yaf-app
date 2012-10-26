@@ -44,16 +44,27 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
 
     <script type="text/javascript" src="./scripts/mojito-yaf.js"></script>
 
+    <script type="text/javascript" src="./tests/test-dispatch.js"></script>
+
     <script type="text/javascript">
-      YUI().use('mojito-yaf', function (Y) {
-          debugger;
+      YUI().use('mojito-yaf', 'mojito-test-mojits', function (Y) {
+          Y.one('#navigateButton').on('click',
+            function () {
+              Y.mApp = new Y.mojito.App();
+              Y.mojito.testMojit1 = new Y.mojito.TestMojit1({id:'testMojit1'});
+              Y.mApp.addMojitToRoutes(Y.mojito.testMojit1);
+
+              Y.mApp.router.navigate('/testMojit1:index');
+            });
       });
     </script>
   </head>
   <body>
-    <span id="Message"></span>
+    <button id="navigateButton">Setup test and navigate mojit to 'index'</button>
+    <br/>
     <button id="setMsgButton">Set the msg to: </button><input id="setMsgText" type="text"/>
     <br/>
     <button id="saveMsgButton">Save the msg</button>
+    <span id="Message"></span>
   </body>
 </html>

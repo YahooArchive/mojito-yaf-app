@@ -10,7 +10,7 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
         {
             initializer: function () {
                 //  Regular Y.Lang sub template
-                //this.set('template', 'The msg is: {msg}');
+                //this.set('template', 'The msg is: {msg}<br>');
 
                 //  Handlebars template
                 this.set('template', 'The msg is: {{msg}}<br>');
@@ -67,9 +67,13 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                 msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
                 this.addViewForKey(msgView, 'msgView');
 
-                this.set('mojitEvents', ['mojit:setMsg', 'mojit:saveMsg']);
+                this.set('mojitEvents',
+                    ['mojit:index', 'mojit:setMsg', 'mojit:saveMsg']);
 
                 this.setupEventObservations();
+            },
+            onMojitIndex: function (evt) {
+                console.log('got to "mojit:index" event');
             },
             onMojitSetMsg: function (evt) {
                 this.get('models')['msgHolder'].set('msg', evt.msg);
@@ -99,10 +103,11 @@ logInclude: { TestRunner: true }
         name: 'instantiation',
 
         setUp: function () {
-            Y.mApp = new Y.mojito.App();
             msg = Y.one('#Message');
 
+            Y.mApp = new Y.mojito.App();
             Y.mojito.testMojit1 = new Y.mojito.TestMojit1({id: 'testMojit1'});
+            Y.mApp.addMojitToRoutes(Y.mojito.testMojit1);
         },
 
         tearDown: function () {
