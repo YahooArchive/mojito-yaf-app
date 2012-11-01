@@ -7,9 +7,9 @@ YUI.add('mojito-yaf', function (Y, NAME) {
             _yApp: null,
             router: null,
 
-            init: function () {
+            initializer: function () {
                 this._yApp = new Y.App();
-                this.router = new Y.mojito.Router(this);
+                this.router = new Y.mojito.Router({app: this});
             },
 
             addMojitToRoutes: function (aMojit) {
@@ -29,17 +29,17 @@ YUI.add('mojito-yaf', function (Y, NAME) {
         {
             mApp: null,
 
-            init: function (mApp) {
+            initializer: function (params) {
 
-                this.mApp = mApp;
+                this.mApp = params.app;
 
                 //  Add a generic route for mojit dispatching
                 this.mApp._yApp.route('/*mojitID:*action',
                               this.dispatchToMojit.bind(this));
 
-                mApp._yApp.on('navigate', function (e) {
-                    mApp.logMessage('Navigated to: ' + e.url);
-                });
+                this.mApp._yApp.on('navigate', function (e) {
+                    this.mApp.logMessage('Navigated to: ' + e.url);
+                }.bind(this));
             },
 
             addMojitToRoutes: function (aMojit) {
