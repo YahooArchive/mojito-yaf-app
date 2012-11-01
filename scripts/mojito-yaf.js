@@ -1,6 +1,8 @@
 YUI.add('mojito-yaf', function (Y, NAME) {
 
-    Y.namespace('mojito').App = Y.Base.create('App', Y.Base, [],
+    var MOJITO_NS = Y.namespace('mojito');
+
+    MOJITO_NS.App = Y.Base.create('App', Y.Base, [],
         {
             _yApp: null,
             router: null,
@@ -23,7 +25,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     //  ---
 
-    Y.namespace('mojito').Router = Y.Base.create('Router', Y.Base, [],
+    MOJITO_NS.Router = Y.Base.create('Router', Y.Base, [],
         {
             mApp: null,
 
@@ -39,10 +41,12 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                     mApp.logMessage('Navigated to: ' + e.url);
                 });
             },
+
             addMojitToRoutes: function (aMojit) {
                 //  Add the mojit as an event target
                 this.addTarget(aMojit);
             },
+
             dispatchToMojit: function (req, res, next) {
                 var mojitID,
                     mojitAction;
@@ -68,7 +72,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
     //  This class is a temporary mock up of the upcoming Y.template
     //  functionality.
 
-    Y.namespace('mojito').Template = Y.Base.create('Template', Y.Base, [],
+    MOJITO_NS.Template = Y.Base.create('Template', Y.Base, [],
         {
             _renderer: null,
 
@@ -86,6 +90,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
                 this.set('_renderer', templateRenderer);
             },
+
             render: function (template, data) {
                 return this.get('_renderer').render(template, data);
             }
@@ -94,7 +99,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     //  ---
 
-    Y.namespace('mojito').View = Y.Base.create('View', Y.View, [],
+    MOJITO_NS.View = Y.Base.create('View', Y.View, [],
         {
             autoBindings: null,
 
@@ -113,6 +118,11 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
                 this.set('container', container);
             },
+
+            getChildMojitNodes: function () {
+                return this.get('container').all('.mojit').getDOMNodes();
+            },
+
             render: function () {
                 var container,
                     html;
@@ -123,6 +133,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                                                     this.get('model').toJSON());
                 container.append(html);
             },
+
             setupBindings: function () {
 
                 //  The default implementation of this method sets up a
@@ -153,7 +164,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     //  ---
 
-    Y.namespace('mojito').Mojit = Y.Base.create('Mojit', Y.Base, [],
+    MOJITO_NS.Mojit = Y.Base.create('Mojit', Y.Base, [],
         {
             id: null,
 
@@ -172,6 +183,7 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 this.set('models', {});
                 this.set('views', {});
             },
+
             addViewForKey: function (viewObj, keyName) {
                 this.get('views')[keyName] = viewObj;
 
@@ -181,6 +193,26 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                 //  Register to receive events 'bubbling' from our views
                 viewObj.addTarget(this);
             },
+
+            getChildMojits: function () {
+                var ourViews,
+                    i,
+
+                    childMojitNodes,
+                    childMojits;
+
+                //  We might have multiple views which contain mojit references
+                ourViews = this.get('views');
+
+                for (i = 0; i < ourViews.length; i++) {
+                    childMojitNodes = ourViews[i].getChildMojitNodes();
+                    childMojits = childMojitNodes.map(
+                                    function (aNode) {
+                                        return aNode._mojit;
+                                    });
+                }
+            },
+
             setupEventObservations: function () {
                 var evts = this.get('mojitEvents'),
                     i,
@@ -222,4 +254,9 @@ YUI.add('mojito-yaf', function (Y, NAME) {
         return allMojits;
     }
 
-}, '0.0.1', {requires: ['base', 'app']});
+}, '0.0.1', {
+    requires: [
+        'base',
+        'app'
+    ]
+});

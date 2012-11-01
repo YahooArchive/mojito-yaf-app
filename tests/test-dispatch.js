@@ -6,7 +6,9 @@
 
 YUI.add('mojito-test-mojits', function (Y, NAME) {
 
-    Y.namespace('mojito').MsgView = Y.Base.create('MsgView', Y.mojito.View, [],
+    var MOJITO_NS = Y.namespace('mojito');
+
+    MOJITO_NS.MsgView = Y.Base.create('MsgView', Y.mojito.View, [],
         {
             initializer: function () {
                 //  Regular Y.Lang sub template
@@ -21,9 +23,11 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                            domEvent: 'click',
                            mojitEvent: 'mojit:saveMsg'}]);
             },
+
             setupBindings: function () {
                 //  Make sure and set up the auto bindings
-                this.constructor.superclass.setupBindings.apply(this, arguments);
+                this.constructor.superclass.setupBindings.apply(this,
+                                                                 arguments);
 
                 Y.one('#setMsgButton').on(
                         'click',
@@ -35,13 +39,13 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
         }
     );
 
-    Y.namespace('mojito').MsgModel = Y.Base.create('MsgModel', Y.Model, [Y.ModelSync.Local],
+    MOJITO_NS.MsgModel = Y.Base.create('MsgModel', Y.Model, [Y.ModelSync.Local],
         {
             root: 'mojito-test',
         }
     );
 
-    Y.namespace('mojito').MsgMojit = Y.Base.create('MsgMojit', Y.mojito.Mojit, [],
+    MOJITO_NS.MsgMojit = Y.Base.create('MsgMojit', Y.mojito.Mojit, [],
         {
             initializer: function () {
                 var msgModel;
@@ -61,19 +65,29 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
                 this.setupEventObservations();
             },
+
             onMojitIndex: function (evt) {
                 console.log('got to "mojit:index" event');
             },
+
             onMojitSetMsg: function (evt) {
                 this.get('models')['msgHolder'].set('msg', evt.msg);
             },
+
             onMojitSaveMsg: function (evt) {
                 this.get('models')['msgHolder'].save();
             }
         }
     );
 
-}, '0.0.1', {requires: ['mojito-yaf', 'test', 'handlebars', 'gallery-model-sync-local']});
+}, '0.0.1', {
+    requires: [
+        'mojito-yaf',
+        'test',
+        'handlebars',
+        'gallery-model-sync-local'
+    ]
+});
 
 YUI({
 useConsoleOutput: true,
