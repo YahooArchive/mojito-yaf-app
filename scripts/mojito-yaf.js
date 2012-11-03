@@ -2,71 +2,6 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     var MOJITO_NS = Y.namespace('mojito');
 
-    MOJITO_NS.App = Y.Base.create('App', Y.Base, [],
-        {
-            _yApp: null,
-            router: null,
-
-            initializer: function () {
-                this._yApp = new Y.App();
-                this.router = new Y.mojito.Router({app: this});
-            },
-
-            addMojitToRoutes: function (aMojit) {
-                this.router.addMojitToRoutes(aMojit);
-            },
-
-            logMessage: function (msg) {
-                Y.one('#Message').set('text', Y.one('#Message').get('text') +
-                                                ' || ' + msg);
-            }
-        }
-    );
-
-    //  ---
-
-    MOJITO_NS.Router = Y.Base.create('Router', Y.Base, [],
-        {
-            mApp: null,
-
-            initializer: function (params) {
-
-                this.mApp = params.app;
-
-                //  Add a generic route for mojit dispatching
-                this.mApp._yApp.route('/*mojitID:*action',
-                              this.dispatchToMojit.bind(this));
-
-                this.mApp._yApp.on('navigate', function (e) {
-                    this.mApp.logMessage('Navigated to: ' + e.url);
-                }.bind(this));
-            },
-
-            addMojitToRoutes: function (aMojit) {
-                //  Add the mojit as an event target
-                this.addTarget(aMojit);
-            },
-
-            dispatchToMojit: function (req, res, next) {
-                var mojitID,
-                    mojitAction;
-
-                //  Right now, mojitID is unused... do we need it?
-                mojitID = req.params.mojitID;
-                mojitAction = req.params.action;
-
-                //  Fire an event - the mojits should be listening
-                this.fire('mojit:' + mojitAction);
-
-                //  Call the next most-specific handler.
-                next();
-            },
-            navigate: function (url) {
-                return this.mApp._yApp.navigate(url);
-            }
-        }
-    );
-
     //  ---
 
     //  This class is a temporary mock up of the upcoming Y.template
@@ -101,8 +36,6 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     MOJITO_NS.View = Y.Base.create('View', Y.View, [],
         {
-            autoBindings: null,
-
             templateObj: new Y.mojito.Template(),
 
             initializer: function (params) {
@@ -132,18 +65,58 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                                                     this.get('template'),
                                                     this.get('model').toJSON());
                 container.append(html);
+            }
+        }
+    );
+
+    //  ---
+
+    MOJITO_NS.Handler = Y.Base.create('Handler', Y.Base, [],
+        {
+            autoBindings: null,
+
+            initializer: function (params) {
+
+                //  Add a generic route for mojit dispatching
+                Y.app.route('/' + params.mojitID  + ':*action',
+                              this.routeToMojit.bind(this));
+            },
+
+            addView: function (viewObj) {
+
+                //  Tell ourself to set up our event bindings
+                //  TODO: This should be per-view - proto code:
+                //this.setupBindings(viewObj.get('node'));
+                this.setupBindings();
+
+                //  Register ourself to receive events 'bubbling' from the view
+                viewObj.addTarget(this);
+            },
+
+            routeToMojit: function (req, res, next) {
+                var mojitAction;
+
+                mojitAction = req.params.action;
+
+                //  Fire an event - the mojits should be listening
+                this.fire('mojit:' + mojitAction);
+
+                //  Call the next most-specific handler.
+                next();
             },
 
             setupBindings: function () {
 
                 //  The default implementation of this method sets up a
-                //  Y.mojito.View's "autoBindings"
+                //  Y.mojito.Handler's "autoBindings"
                 var autos,
                     i,
 
                     mojitEvent;
 
-                autos = this.get('autoBindings');
+                if (!(autos = this.get('autoBindings'))) {
+                    return;
+                }
 
                 for (i = 0; i < autos.length; i++) {
 
@@ -166,32 +139,28 @@ YUI.add('mojito-yaf', function (Y, NAME) {
 
     MOJITO_NS.Mojit = Y.Base.create('Mojit', Y.Base, [],
         {
-            id: null,
-
-            models: null,
-            views: null,
-            controller: null,
-
-            mojitEvents: null,
-
             initializer : function (params) {
 
-                var id = params.id;
+                var id = params.id,
+                    handlerType;
 
                 this.set('id', id);
 
-                this.set('models', {});
-                this.set('views', {});
+                handlerType = this.get('handlerType');
+
+                this.set('handler', new handlerType({mojitID: id}));
+
+                this.get('handler').addTarget(this);
             },
 
-            addViewForKey: function (viewObj, keyName) {
-                this.get('views')[keyName] = viewObj;
+            addViewNamed: function (viewObj, viewName) {
+                this.get('views')[viewName] = viewObj;
 
-                //  Tell the view to set up its event bindings
-                viewObj.setupBindings();
+                //  Maybe could be:
+                //  this.get('handler').addEventSource(viewObj,
+                //  <bindingsStruct>);
 
-                //  Register to receive events 'bubbling' from our views
-                viewObj.addTarget(this);
+                this.get('handler').addView(viewObj);
             },
 
             getChildMojits: function () {
@@ -233,10 +202,18 @@ YUI.add('mojito-yaf', function (Y, NAME) {
                     this.on(evtName, this[methodName].bind(this));
                 }
             },
+        }, {
+            ATTRS: {
+                id: null,
+                models: {value: {}},
+                views: {value: {}},
+                mojitEvents: null,
+                handlerType: {value: MOJITO_NS.Handler}
+            }
         }
     );
 
-    Y.mojito.Mojit.findAllMojits = function () {
+    MOJITO_NS.Mojit.findAllMojits = function () {
         var allMojitNodes,
             allMojits;
 

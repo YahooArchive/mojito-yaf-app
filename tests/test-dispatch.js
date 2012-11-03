@@ -16,7 +16,15 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
                 //  Handlebars template
                 this.set('template', 'The msg is: {{msg}}<br>');
+            }
+        }
+    );
 
+    //  ---
+
+    MOJITO_NS.MsgHandler = Y.Base.create('MsgHandler', Y.mojito.Handler, [],
+        {
+            initializer: function () {
                 //  "Automatic" event bindings
                 this.set('autoBindings',
                          [{selector: '#saveMsgButton',
@@ -39,11 +47,15 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
         }
     );
 
+    //  ---
+
     MOJITO_NS.MsgModel = Y.Base.create('MsgModel', Y.Model, [Y.ModelSync.Local],
         {
             root: 'mojito-test',
         }
     );
+
+    //  ---
 
     MOJITO_NS.MsgMojit = Y.Base.create('MsgMojit', Y.mojito.Mojit, [],
         {
@@ -58,7 +70,7 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                                                     id: this.get('id'),
                                                     mojit: this});
                 msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
-                this.addViewForKey(msgView, 'msgView');
+                this.addViewNamed(msgView, 'msgView');
 
                 this.set('mojitEvents',
                     ['mojit:index', 'mojit:setMsg', 'mojit:saveMsg']);
@@ -76,6 +88,10 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
             onMojitSaveMsg: function (evt) {
                 this.get('models')['msgHolder'].save();
+            }
+        }, {
+            ATTRS: {
+                handlerType: {value: MOJITO_NS.MsgHandler}
             }
         }
     );
@@ -121,7 +137,7 @@ logInclude: { TestRunner: true }
         },
 
         'test route navigation function': function () {
-            Y.mApp.router.navigate('/msgMojit:index');
+            //Y.mApp.router.navigate('/msgMojit:index');
             //Y.Assert.areEqual(Y.one('#msgMojit').get('text'),
             //                    'The msg is: Hey pal!');
         }

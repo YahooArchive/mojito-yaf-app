@@ -51,23 +51,50 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
     <script type="text/javascript" src="./tests/test-dispatch.js"></script>
 
     <script type="text/javascript">
+        /*
+        var sampleAppJSON = 
+        [
+            {
+                "settings": [ "master" ],
+                "appPort": 8666,
+                "specs": {
+                    "msg": {
+                    "type": "MsgMojit"
+                    }
+                }
+            }
+        ];
+
+        var sampleRoutesJSON =
+        [
+            {
+                "settings": [ "master" ],
+                "msg index": {
+                  "verbs": ["get"],
+                  "path": "/",
+                  "call": "@MsgMojit.index",
+                  "params": { "first_visit": true }
+                }
+            }
+        ]
+        */
+
       YUI().use('mojito-yaf', 'mojito-test-mojits', function (Y) {
           Y.one('#navigateButton').on('click',
             function () {
               var msgMojit;
 
-              Y.mApp = new Y.mojito.App();
-              msgMojit = new Y.mojito.MsgMojit({id:'msgMojit'});
-              Y.mApp.addMojitToRoutes(msgMojit);
+              Y.app = new Y.App();
 
-              Y.mApp.router.navigate('/msgMojit:index');
+              msgMojit = new Y.mojito.MsgMojit({id:'msgMojit'});
+              Y.app.navigate('/msgMojit:index');
             });
           Y.one('#alertAllMojits').on('click',
             function () {
               var stuff = Y.mojito.Mojit.findAllMojits();
               alert(Object.keys(stuff));
             });
-      });
+        });
     </script>
   </head>
   <body>
