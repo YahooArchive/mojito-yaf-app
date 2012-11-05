@@ -74,6 +74,11 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
               Y.app.navigate('/msgMojit:index');
             });
 
+          Y.one('#goToFooRoute').on('click',
+            function () {
+              Y.app.navigate('/foo');
+            });
+
           Y.one('#alertAllMojits').on('click',
             function () {
               var stuff = Y.mojito.Mojit.findAllMojits();
@@ -91,6 +96,9 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
     <br/>
     <br/>
     <button id="alertAllMojits">Alert all mojits</button>
+    <br/>
+    <br/>
+    <button id="goToFooRoute">Go to 'foo' route</button>
     <br/>
     <br/>
     <span id="Message"></span>

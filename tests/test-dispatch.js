@@ -24,18 +24,10 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
     MOJITO_NS.MsgHandler = Y.Base.create('MsgHandler', Y.mojito.Handler, [],
         {
-            initializer: function () {
-                //  "Automatic" event bindings
-                this.set('autoBindings',
-                         [{selector: '#saveMsgButton',
-                           domEvent: 'click',
-                           mojitEvent: 'mojit:saveMsg'}]);
-            },
-
-            setupBindings: function () {
+            setupEventBindings: function () {
                 //  Make sure and set up the auto bindings
-                this.constructor.superclass.setupBindings.apply(this,
-                                                                 arguments);
+                this.constructor.superclass.setupEventBindings.apply(
+                                                         this, arguments);
 
                 Y.one('#setMsgButton').on(
                         'click',
@@ -43,6 +35,14 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                             this.fire('mojit:setMsg',
                                       {msg: Y.one('#setMsgText').get('value')});
                         }.bind(this));
+            }
+        }, {
+            ATTRS: {
+                eventBindings: {value:
+                                 [{selector: '#saveMsgButton',
+                                   domEvent: 'click',
+                                   mojitEvent: 'mojit:saveMsg'}]},
+                routes: {value: [{route: '/foo', event: 'foo:fooEvent'}]}
             }
         }
     );
@@ -72,14 +72,11 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                 msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
                 this.addViewNamed(msgView, 'msgView');
 
-                this.set('mojitEvents',
-                    ['mojit:index', 'mojit:setMsg', 'mojit:saveMsg']);
-
                 this.setupEventObservations();
             },
 
             onMojitIndex: function (evt) {
-                console.log('got to "mojit:index" event');
+                console.log('got to "mojit:index" event handler');
             },
 
             onMojitSetMsg: function (evt) {
@@ -88,9 +85,16 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
 
             onMojitSaveMsg: function (evt) {
                 this.get('models')['msgHolder'].save();
+            },
+
+            onFooFooEvent: function (evt) {
+                console.log('got to "foo:fooEvent" event handler');
             }
         }, {
             ATTRS: {
+                mojitEvents: {value:
+                            ['mojit:index', 'mojit:setMsg', 'mojit:saveMsg',
+                             'foo:fooEvent']},
                 handlerType: {value: MOJITO_NS.MsgHandler}
             }
         }
