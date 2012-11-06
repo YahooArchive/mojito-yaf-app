@@ -52,31 +52,30 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
 
     <script type="text/javascript">
       YUI().use('mojito-yaf', 'mojito-test-mojits', function (Y) {
+
+          //  ---
+
+          // !TODO! Hardcoded data in lieu of application.json / routes.json
+          //  This is a hack for this test!
+          var instanceMap = {
+              'mainMojit' : 'mojito.HTMLMojit',
+              'msgMojit' : 'mojito.MsgMojit'
+              };
+
+          //  !END TODO!
+
+          var app = new Y.mojito.App({instData: instanceMap});
+
+          //  ---
+
           Y.one('#navigateButton').on('click',
             function () {
-              Y.app = new Y.mojito.App();
-
-              //  ---
-
-              // !TODO! Hardcoded data in lieu of application.json / routes.json
-              //  This is a hack for this test!
-              var instanceMap = {
-                  'msgMojit' : 'mojito.MsgMojit'
-                  };
-              Y.app.set('mojitData', instanceMap);
-
-              Y.app.registerMojitInstance('msgMojit');
-
-              //  !END TODO!
-
-              //  ---
-
-              Y.app.navigate('/msgMojit:index');
+              app.navigate('/msgMojit:index');
             });
 
           Y.one('#goToFooRoute').on('click',
             function () {
-              Y.app.navigate('/foo');
+              app.navigate('/foo');
             });
 
           Y.one('#alertAllMojits').on('click',
@@ -88,7 +87,7 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
     </script>
   </head>
   <body>
-    <button id="navigateButton">Setup test and navigate mojit to 'index'</button>
+    <button id="navigateButton">Navigate to 'index'</button>
     <br/>
     <br/>
     <button id="setMsgButton">Set the msg to: </button><input id="setMsgText" type="text"/>
