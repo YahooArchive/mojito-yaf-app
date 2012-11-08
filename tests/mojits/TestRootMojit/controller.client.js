@@ -4,22 +4,25 @@
  * See the accompanying LICENSE file for terms.
  */
 
-YUI.add('HTMLMojit', function (Y, NAME) {
+YUI.add('TestRootMojit', function (Y, NAME) {
 
     var MOJITO_NS = Y.namespace('mojito');
 
-    MOJITO_NS.HTMLMojitView = Y.Base.create('HTMLMojitView', Y.mojito.View, [],
+    MOJITO_NS.TestRootMojitView = Y.Base.create('TestRootMojitView', Y.mojito.View, [],
         {
+            getDOMAttachPoint: function () {
+                return Y.one('#mainMojit');
+            }
         }, {
             ATTRS: {
-                'templateLocation': {value: null},
+                'templateLocation': {value: 'tests/mojits/TestRootMojit/templates/index.hb.html'},
             }
         }
     );
 
     //  ---
 
-    MOJITO_NS.HTMLMojitHandler = Y.Base.create('HTMLMojitHandler', Y.mojito.Handler, [],
+    MOJITO_NS.TestRootMojitHandler = Y.Base.create('TestRootMojitHandler', Y.mojito.Handler, [],
         {
         }, {
             ATTRS: {
@@ -30,12 +33,12 @@ YUI.add('HTMLMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.HTMLMojit = Y.Base.create('HTMLMojit', Y.mojito.Mojit, [],
+    MOJITO_NS.TestRootMojit = Y.Base.create('TestRootMojit', Y.mojito.Mojit, [],
         {
             initializer: function () {
                 var msgView;
                
-                msgView = new Y.mojito.HTMLMojitView({id: this.get('id'),
+                msgView = new Y.mojito.TestRootMojitView({id: this.get('id'),
                                                         mojit: this});
                 msgView.set('templateEngine',
                              new Y.mojito.Template(Y.Handlebars));
@@ -49,13 +52,13 @@ YUI.add('HTMLMojit', function (Y, NAME) {
             },
 
             onMojitIndex: function (evt) {
-                console.log('got to HTMLMojit::index');
+                console.log('got to TestRootMojit::index');
             }
 
         }, {
             ATTRS: {
                 mojitEvents: {value: ['mojit:index']},
-                handlerType: {value: MOJITO_NS.HTMLMojitHandler}
+                handlerType: {value: MOJITO_NS.TestRootMojitHandler}
             }
         }
     );
