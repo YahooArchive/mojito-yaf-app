@@ -69,7 +69,10 @@ YUI.add('mojito-test-mojits', function (Y, NAME) {
                 msgView = new Y.mojito.MsgView({model: msgModel,
                                                     id: this.get('id'),
                                                     mojit: this});
-                msgView.set('templateObj', new Y.mojito.Template(Y.Handlebars));
+                msgView.set('templateEngine',
+                             new Y.mojito.Template(Y.Handlebars));
+                msgView.render();
+
                 this.addViewNamed(msgView, 'msgView');
 
                 this.setupEventObservations();
