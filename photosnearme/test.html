@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<!-- ================================================================= -->
+<!--
+NAME: test.html
+AUTH: William J Edney (wje)
+NOTE: Copyright (C) 2012 Yahoo! Inc.
+-->
+<!-- ================================================================= -->
+
+<html>
+  <head>
+
+    <title>A Mojito / YAF integration test of PhotosNearMe</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <link rel="stylesheet" href="./css/style.css"/>
+
+    <style type="text/css">
+    </style>
+
+    <!-- The fully minified version of YUI -->
+    <!--<script type="text/javascript"
+      src="http://yui.yahooapis.com/3.7.2/build/yui/yui-min.js"></script>-->
+
+    <!-- The debug version of YUI -->
+    <script type="text/javascript">
+      //  Put YUI in debug mode so that we can step through it.
+      YUI_config = {filter: 'debug', useConsoleOutput: true};
+    </script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/3.7.2/build/yui/yui-debug.js"></script>
+
+    <script type="text/javascript" src="../lib/mojito-yaf.js"></script>
+    <script type="text/javascript" src="../lib/mojits/HTMLMojit/controller.client.js"></script>
+
+    <script type="text/javascript" src="../photosnearme/mojits/PNMRootMojit/controller.client.js"></script>
+
+    <script type="text/javascript" src="../photosnearme/mojits/PNMPlaceMojit/controller.client.js"></script>
+    <script type="text/javascript" src="../photosnearme/mojits/PNMPlaceMojit/models/place.js"></script>
+
+    <script type="text/javascript">
+      YUI().use('mojito-yaf', 'HTMLMojit', 'pnm-root-mojit', 'pnm-place-mojit', function (Y) {
+
+          //  ---
+
+          // !TODO! Hardcoded data in lieu of application.json / routes.json
+          //  This is a hack for this test!
+          var instanceMap = {
+              'mainMojit' : 'mojito.HTMLMojit',
+              'rootMojit' : 'PNM.RootMojit',
+              'placeMojit' : 'PNM.PlaceMojit',
+              //'mainGrid' : 'PNM.GridMojit',
+              //'mainLightbox' : 'PNM.LightboxMojit'
+              };
+          //  !END TODO!
+
+          //  ---
+
+          YUI.namespace('Env.Flickr').API_KEY = '0984607e2222db7a1be6a5692741ca08';
+
+          var app = new Y.mojito.App({instData: instanceMap});
+
+          app.navigate('/places/2367105');
+        });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

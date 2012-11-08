@@ -1,0 +1,13 @@
+<ul class="layout">
+  {{#each photos}}
+    <li class="photo">
+        <a href="/photos/{{id}}/">
+            <img title="{{title}}" src="{{thumbUrl}}"
+                alt="Thumbnail of a photo with title: {{title}}" />
+        </a>
+    </li>
+  {{/each}}
+</ul>
+
+<p class="loading"></p>
+
