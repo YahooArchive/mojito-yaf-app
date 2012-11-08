@@ -8,7 +8,7 @@ YUI.add('MsgMojit', function (Y, NAME) {
 
     var MOJITO_NS = Y.namespace('mojito');
 
-    MOJITO_NS.MsgView = Y.Base.create('MsgView', Y.mojito.View, [],
+    MOJITO_NS.MsgView = Y.Base.create('MsgView', MOJITO_NS.View, [],
         {
             initializer: function () {
                 //  Regular Y.Lang sub template
@@ -22,7 +22,7 @@ YUI.add('MsgMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.MsgHandler = Y.Base.create('MsgHandler', Y.mojito.Handler, [],
+    MOJITO_NS.MsgHandler = Y.Base.create('MsgHandler', MOJITO_NS.Handler, [],
         {
             setupEventBindings: function () {
                 //  Make sure and set up the auto bindings
@@ -57,20 +57,20 @@ YUI.add('MsgMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.MsgMojit = Y.Base.create('MsgMojit', Y.mojito.Mojit, [],
+    MOJITO_NS.MsgMojit = Y.Base.create('MsgMojit', MOJITO_NS.Mojit, [],
         {
             initializer: function () {
                 var msgModel;
                 var msgView;
                
-                msgModel = new Y.mojito.MsgModel({msg: 'Howdy!'});
+                msgModel = new MOJITO_NS.MsgModel({msg: 'Howdy!'});
                 this.get('models')['msgHolder'] = msgModel;
 
-                msgView = new Y.mojito.MsgView({model: msgModel,
+                msgView = new MOJITO_NS.MsgView({model: msgModel,
                                                     id: this.get('id'),
                                                     mojit: this});
                 msgView.set('templateEngine',
-                             new Y.mojito.Template(Y.Handlebars));
+                             new MOJITO_NS.Template(Y.Handlebars));
                 msgView.render();
 
                 this.addViewNamed(msgView, 'msgView');

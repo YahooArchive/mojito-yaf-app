@@ -8,7 +8,7 @@ YUI.add('TestRootMojit', function (Y, NAME) {
 
     var MOJITO_NS = Y.namespace('mojito');
 
-    MOJITO_NS.TestRootMojitView = Y.Base.create('TestRootMojitView', Y.mojito.View, [],
+    MOJITO_NS.TestRootMojitView = Y.Base.create('TestRootMojitView', MOJITO_NS.View, [],
         {
             getDOMAttachPoint: function () {
                 return Y.one('#mainMojit');
@@ -22,7 +22,7 @@ YUI.add('TestRootMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.TestRootMojitHandler = Y.Base.create('TestRootMojitHandler', Y.mojito.Handler, [],
+    MOJITO_NS.TestRootMojitHandler = Y.Base.create('TestRootMojitHandler', MOJITO_NS.Handler, [],
         {
         }, {
             ATTRS: {
@@ -33,15 +33,15 @@ YUI.add('TestRootMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.TestRootMojit = Y.Base.create('TestRootMojit', Y.mojito.Mojit, [],
+    MOJITO_NS.TestRootMojit = Y.Base.create('TestRootMojit', MOJITO_NS.Mojit, [],
         {
             initializer: function () {
                 var msgView;
                
-                msgView = new Y.mojito.TestRootMojitView({id: this.get('id'),
+                msgView = new MOJITO_NS.TestRootMojitView({id: this.get('id'),
                                                         mojit: this});
                 msgView.set('templateEngine',
-                             new Y.mojito.Template(Y.Handlebars));
+                             new MOJITO_NS.Template(Y.Handlebars));
 
                 msgView.loadTemplate();
                 msgView.render();
