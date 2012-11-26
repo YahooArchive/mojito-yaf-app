@@ -1,0 +1,41 @@
+<div id="{{mojit_view_id}}" class="mojit wrap">
+  <div id="nav">
+    <!--
+  {{#hasLink}}
+    {{#prev}}
+    <a href="{{{link}}}">{{title}}</a>
+    {{/prev}}
+  {{/hasLink}}
+  {{^hasLink}}
+    {{#prev}}{{title}}{{/prev}}
+  {{/hasLink}}
+  {{#next}}
+    <a href="{{{link}}}">{{title}}</a>
+    {{/next}}
+    -->
+</div>
+  <div id="main" class="layout">
+    <div class="grid">
+      <ul class="layout">
+      {{#data}}
+      <li class="photo">
+        <a href="{{location}}" data-id="{{image_id}}">
+          <img title="{{title}}" src="{{location}}" alt="Thumbnail of a photo with title: {{title}}"/>
+        </a>
+      </li>
+      {{/data}}
+      </ul>
+    </div>
+  </div>
+  <!--
+  <div id="display" style="position: absolute; right: 0; top: 100px; background-color: pink; text-align: center;">      
+   Model Unknown
+  </div>
+  -->
+  <div style="width: 50%; float: right">
+  <!-- load image here dynamically -->
+    <div id="display" style="margin: 0 auto;">
+      &nbsp;
+    </div>
+  </div>
+</div>

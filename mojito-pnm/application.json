@@ -1,0 +1,33 @@
+[
+  {
+    "settings": [ "master" ],
+    "specs": {
+      "frame": {
+        "type": "HTMLFrameMojit",
+        "config": {
+            "deploy": true,
+            "child": {
+                "type": "MasterMojit",
+                "config": {
+                    "children": {
+                        "photos": {
+                            "type": "PhotosMojit"
+                        },
+                        "lightbox": {
+                            "type": "LightboxMojit"
+                        }
+                    }
+                }
+            },
+        "assets": {
+            "top": {
+                "css": [
+                    "/static/MasterMojit/assets/style.css"
+                    ]
+                }
+            }
+        }
+      }
+    }
+  }
+]
