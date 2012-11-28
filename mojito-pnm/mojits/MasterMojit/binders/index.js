@@ -29,11 +29,13 @@ YUI.add('MasterMojitBinder', function (Y, NAME) {
         init: function(mojitProxy) {
             this.mojitProxy = mojitProxy;
 
-            mojitProxy.listen('fire-link', function(payload) {
+            mojitProxy.listen('detail-link', function(payload) {
                 var children = mojitProxy.getChildren();
                 var receiverID = children['lightbox'].viewId;
 
-                mojitProxy.broadcast('broadcast-link', {url: payload.data.url}, {target: {viewId: receiverID}});
+                mojitProxy.broadcast('broadcast-detail-link',
+                    {url: payload.data.url},
+                    {target: {viewId: receiverID}});
             });
         }
     };

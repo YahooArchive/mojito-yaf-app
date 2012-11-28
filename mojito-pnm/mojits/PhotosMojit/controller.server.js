@@ -85,9 +85,5 @@ YUI.add('PhotosMojit', function (Y, NAME) {
             });
         }
     };
-    // Generate the link to the next page based on:   
-    // - mojit id 
-    // - action 
-    // - params
 
 }, '0.0.1', {requires: ['dump']});

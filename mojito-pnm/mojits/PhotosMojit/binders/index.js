@@ -44,7 +44,7 @@ YUI.add('PhotosMojitBinder', function (Y, NAME) {
             node.all('li.photo a').on('click', function(evt) {
                 var url = evt.currentTarget.get('href');
                 evt.halt();
-                mp.broadcast('fire-link', {url: url});
+                mp.broadcast('detail-link', {url: url});
             });
         },
     /**

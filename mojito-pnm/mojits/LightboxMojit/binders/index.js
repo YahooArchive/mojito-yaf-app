@@ -28,6 +28,17 @@ YUI.add('LightboxMojitBinder', function (Y, NAME) {
     */
         init: function(mojitProxy) {
             this.mojitProxy = mojitProxy;
+
+            this.mojitProxy.listen('broadcast-detail-link', function(payload) {
+                var url = payload.data.url;
+                mojitProxy.refreshView({
+                    params: {
+                        url: {
+                            photourl: url
+                        }
+                    }
+                });
+            });
         }
     };
 }, '0.0.1', {requires: ['mojito-client']});

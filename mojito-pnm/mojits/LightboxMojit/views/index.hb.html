@@ -1,3 +1,23 @@
 <div id="{{mojit_view_id}}" class="mojit">
-  Got to Lightbox
+  {{#if nav}}
+  <ul class="lightbox-nav layout">
+    {{#if nav.prev}}
+      <li class="prev"><a href="/photos/{{nav.prev}}/">« Previous</a></li>
+    {{/if}}
+
+    {{#if nav.next}}
+      <li class="next"><a href="/photos/{{nav.next}}/">Next »</a></li>
+    {{/if}}
+  </ul>
+  {{/if}}
+
+  <div class="photo">
+      <img src="{{photo.largeUrl}}" alt="A photo titled: {{photo.title}}" />
+
+      <div class="photo-info">
+          <h2 class="photo-title">
+              <a href="{{photo.pageUrl}}" title="View on Flickr">{{photo.title}}</a>
+          </h2>
+      </div>
+  </div>
 </div>

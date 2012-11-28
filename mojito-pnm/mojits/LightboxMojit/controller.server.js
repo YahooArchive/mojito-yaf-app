@@ -18,13 +18,13 @@ YUI.add('LightboxMojit', function (Y, NAME) {
             this.config = config;
         },
         index: function(actionContext) {
-            console.log('foo');
-            actionContext.done()
+            var photourl = actionContext.params.merged('photourl') || null;
+            if (photourl) {
+                actionContext.done({nickname: nickname});
+            } else {
+                actionContext.done();
+            }
         }
     };
-    // Generate the link to the next page based on:   
-    // - mojit id 
-    // - action 
-    // - params
 
 }, '0.0.1', {requires: ['dump']});
