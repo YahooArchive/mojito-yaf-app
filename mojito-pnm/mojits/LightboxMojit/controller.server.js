@@ -18,9 +18,15 @@ YUI.add('LightboxMojit', function (Y, NAME) {
             this.config = config;
         },
         index: function(actionContext) {
-            var photourl = actionContext.params.merged('photourl') || null;
-            if (photourl) {
-                actionContext.done({nickname: nickname});
+            var largeUrl = actionContext.params.merged('largeUrl') || null;
+            var title = actionContext.params.merged('title') || null;
+            if (largeUrl) {
+                actionContext.done({photo:
+                                        {
+                                            largeUrl: largeUrl,
+                                            title: title
+                                        }
+                                    });
             } else {
                 actionContext.done();
             }

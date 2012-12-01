@@ -30,11 +30,16 @@ YUI.add('LightboxMojitBinder', function (Y, NAME) {
             this.mojitProxy = mojitProxy;
 
             this.mojitProxy.listen('broadcast-detail-link', function(payload) {
-                var url = payload.data.url;
+                var largeUrl = payload.data.largeUrl;
+                var title = payload.data.title;
+
+                debugger;
+
                 mojitProxy.refreshView({
                     params: {
                         url: {
-                            photourl: url
+                            largeUrl: largeUrl,
+                            title: title
                         }
                     }
                 });

@@ -42,9 +42,13 @@ YUI.add('PhotosMojitBinder', function (Y, NAME) {
         bind: function(node) {
             var mp = this.mojitProxy;
             node.all('li.photo a').on('click', function(evt) {
-                var url = evt.currentTarget.get('href');
                 evt.halt();
-                mp.broadcast('detail-link', {url: url});
+
+                var largeUrl = evt.currentTarget.getDOMNode().getAttribute('data-large-url');
+                var title = evt.currentTarget.one('img').get('title');
+
+                mp.broadcast('detail-link', {largeUrl: largeUrl,
+                                                title: title});
             });
         },
     /**

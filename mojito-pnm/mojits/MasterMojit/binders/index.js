@@ -34,7 +34,8 @@ YUI.add('MasterMojitBinder', function (Y, NAME) {
                 var receiverID = children['lightbox'].viewId;
 
                 mojitProxy.broadcast('broadcast-detail-link',
-                    {url: payload.data.url},
+                    {largeUrl: payload.data.largeUrl,
+                        title: payload.data.title},
                     {target: {viewId: receiverID}});
             });
         }

@@ -51,12 +51,14 @@ YUI.add('PhotosMojitModel', function(Y, NAME) {
                     rawImage = rawImages[i];
                     image = {
                         title: rawImage.title,
-                        location: 'http://farm' + rawImage.farm + '.static.flickr.com/' + rawImage.server + '/' + rawImage.id + '_' + rawImage.secret + '_s' + '.jpg',
+                        thumbUrl: 'http://farm' + rawImage.farm + '.static.flickr.com/' + rawImage.server + '/' + rawImage.id + '_' + rawImage.secret + '_s' + '.jpg',
+                        largeUrl: 'http://farm' + rawImage.farm + '.static.flickr.com/' + rawImage.server + '/' + rawImage.id + '_' + rawImage.secret + '.jpg',
                         farm: rawImage.farm,
                         server: rawImage.server,
                         image_id: rawImage.id,
                         secret: rawImage.secret
                     };
+
                     if (!image.title) {
                         image.title = "Generic Title: " + query;
                     }
