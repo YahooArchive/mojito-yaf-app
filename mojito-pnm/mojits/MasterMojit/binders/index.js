@@ -29,7 +29,12 @@ YUI.add('MasterMojitBinder', function (Y, NAME) {
         init: function(mojitProxy) {
             this.mojitProxy = mojitProxy;
 
+            //  We listen for 'detail-link' events coming from our 'photos grid'
+            //  child and then broadcast the 'broadcase-detail-link' event, in
+            //  this case specifying that the receiver with an ID matching the
+            //  lightbox
             mojitProxy.listen('detail-link', function(payload) {
+
                 var children = mojitProxy.getChildren();
                 var receiverID = children['lightbox'].viewId;
 

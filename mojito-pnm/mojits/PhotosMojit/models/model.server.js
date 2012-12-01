@@ -28,12 +28,11 @@ YUI.add('PhotosMojitModel', function(Y, NAME) {
             start = parseInt(start, 10) || 0;
             count = parseInt(count, 10) || 100;
 
-            //q = 'select * from flickr.photos.search(' + start + ',' + count + ')  where text="%' + query + '%" and api_key="' + API_KEY + '"';
             q = 'select * from flickr.photos.search(' + start +
                 ',' + count + ') ' +
-                //' where text="%' + query + '%" ' +
                 'where text="' + 'Sunnyvale, CA' + '" ' +
                 'and api_key="' + API_KEY + '"';
+
             Y.log('QUERY: ' + q);
 
             Y.YQL(q, function (rawData) {
@@ -47,23 +46,23 @@ YUI.add('PhotosMojitModel', function(Y, NAME) {
                     images = [],
                     image = null,
                     i = 0;
+
                 for (i; i < rawImages.length; i += 1) {
                     rawImage = rawImages[i];
                     image = {
                         title: rawImage.title,
                         thumbUrl: 'http://farm' + rawImage.farm + '.static.flickr.com/' + rawImage.server + '/' + rawImage.id + '_' + rawImage.secret + '_s' + '.jpg',
                         largeUrl: 'http://farm' + rawImage.farm + '.static.flickr.com/' + rawImage.server + '/' + rawImage.id + '_' + rawImage.secret + '.jpg',
-                        farm: rawImage.farm,
-                        server: rawImage.server,
                         image_id: rawImage.id,
-                        secret: rawImage.secret
                     };
 
                     if (!image.title) {
                         image.title = "Generic Title: " + query;
                     }
+
                     images.push(image);
                 }
+
                 callback(images);
             });
         }

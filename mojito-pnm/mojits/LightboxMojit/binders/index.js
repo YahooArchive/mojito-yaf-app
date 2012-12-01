@@ -29,12 +29,17 @@ YUI.add('LightboxMojitBinder', function (Y, NAME) {
         init: function(mojitProxy) {
             this.mojitProxy = mojitProxy;
 
+            //  Listen for the 'broadcast-detail-link' event. This will have
+            //  been fired when someone clicks on a picture in the photos view
+            //  and will bubble up from there to our master mojit.
             this.mojitProxy.listen('broadcast-detail-link', function(payload) {
+
+                //  The photos view sent us the largeUrl and the title.
                 var largeUrl = payload.data.largeUrl;
                 var title = payload.data.title;
 
-                debugger;
-
+                //  Tell the mojitProxy to refresh the view, using our largeUlr
+                //  and the title.
                 mojitProxy.refreshView({
                     params: {
                         url: {

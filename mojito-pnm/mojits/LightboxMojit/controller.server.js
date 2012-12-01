@@ -18,6 +18,10 @@ YUI.add('LightboxMojit', function (Y, NAME) {
             this.config = config;
         },
         index: function(actionContext) {
+
+            //  If there is real data for largeUrl and title, then render the
+            //  lightbox with them by sending the data to the 'done' method,
+            //  invoking the view rendering.
             var largeUrl = actionContext.params.merged('largeUrl') || null;
             var title = actionContext.params.merged('title') || null;
             if (largeUrl) {
@@ -28,6 +32,7 @@ YUI.add('LightboxMojit', function (Y, NAME) {
                                         }
                                     });
             } else {
+                //  Otherwise, nothing to render.
                 actionContext.done();
             }
         }

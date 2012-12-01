@@ -9,26 +9,6 @@
 YUI.add('PhotosMojit', function (Y, NAME) {
 
     var PAGE_SIZE = 100;
-    function createLink(actionContext, params) {
-        var params_to_copy,
-            mergedParams,
-            k;
-
-        if (actionContext.params.hasOwnProperty('merge')) {
-            params_to_copy = actionContext.params.merged();
-        } else {
-            params_to_copy = actionContext.params.getFromMerged();
-        }
-
-        mergedParams = Y.mojito.util.copy(params_to_copy);
-        for (k in params) {
-            if (params.hasOwnProperty(k)) {
-                mergedParams[k] = params[k];
-            }
-        }
-
-        return actionContext.url.make('frame', 'index', Y.QueryString.stringify(mergedParams));
-    }
 
     /**
     * Constructor for the Controller class.
@@ -64,22 +44,8 @@ YUI.add('PhotosMojit', function (Y, NAME) {
                 Y.log('DATA: ' + Y.dump(data));
 
                 var theData = {
-                    data: data, // images
-                    hasLink: false,
-                    prev: {
-                        title: "prev" // opportunity to localize
-                    },
-                    next: {
-                        link: createLink(actionContext, {page: page + 1}),
-                        title: "next"
-                    },
-                    query: 'mojito'
+                    data: data // images
                 };
-
-                if (page > 1) {
-                    theData.prev.link = createLink(actionContext, {page: page - 1});
-                    theData.hasLink = true;
-                }
 
                 actionContext.done(theData);
             });
