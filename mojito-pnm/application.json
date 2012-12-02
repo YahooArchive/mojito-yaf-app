@@ -22,7 +22,7 @@
         "assets": {
             "top": {
                 "css": [
-                    "/static/MasterMojit/assets/style.css"
+                    "/static/mojito-pnm/assets/style.css"
                     ]
                 }
             }
