@@ -29,3 +29,17 @@ This app is tested using Arrow and Selenium.
     arrow yaf_mojito_descriptor.json --driver=selenium
 
 6. Repeat Step #5 to repeat tests.
+
+Directory organization notes:
+=============================
+
+These directories contain the following content:
+
+lib: The core mojito-yaf functionality.
+
+mojito-pnm: The PhotosNearMe application as a minimal 'straight' Mojito
+application.
+
+photosnearme: The PhotosNearMe application as a Mojito-YAF application.
+
+tests: Tests for the core mojito-yaf functionality.
