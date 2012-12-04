@@ -1,0 +1,32 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/Users/bedney/.nvm/v0.6.20/bin/npm', 'install', '.' ]
+2 info using npm@1.1.37
+3 info using node@v0.6.20
+4 verbose config file /Users/bedney/.npmrc
+5 verbose config file /Users/bedney/.nvm/v0.6.20/etc/npmrc
+6 verbose config file /Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/npmrc
+7 verbose read json /Users/bedney/dev/yahoo/fork-yaf-add0n/mojito-yaf-pnm/package.json
+8 error install Couldn't read dependencies
+9 error Error: Invalid name: "Photos Near Me"
+9 error     at validName (/Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/read-package-json/read-json.js:499:40)
+9 error     at final (/Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/read-package-json/read-json.js:283:27)
+9 error     at /Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/read-package-json/read-json.js:115:33
+9 error     at cb (/Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/slide/lib/async-map.js:48:11)
+9 error     at /Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/read-package-json/read-json.js:229:59
+9 error     at Glob.<anonymous> (/Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/glob/glob.js:92:7)
+9 error     at Glob.emit (events.js:67:17)
+9 error     at Glob.emitMatch (/Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/glob/glob.js:252:10)
+9 error     at Glob._finish (/Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/glob/glob.js:215:8)
+9 error     at Glob.<anonymous> (/Users/bedney/.nvm/v0.6.20/lib/node_modules/npm/node_modules/glob/glob.js:160:27)
+9 error  [Error: Invalid name: "Photos Near Me"]
+10 error You may report this log at:
+10 error     <http://github.com/isaacs/npm/issues>
+10 error or email it to:
+10 error     <npm-@googlegroups.com>
+11 error System Darwin 11.4.2
+12 error command "node" "/Users/bedney/.nvm/v0.6.20/bin/npm" "install" "."
+13 error cwd /Users/bedney/dev/yahoo/fork-yaf-add0n/mojito-yaf-pnm
+14 error node -v v0.6.20
+15 error npm -v 1.1.37
+16 error message Invalid name: "Photos Near Me"
+17 verbose exit [ 1, true ]

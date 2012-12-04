@@ -1,0 +1,22 @@
+{
+    "name": "Photos Near Me",
+    "description": "My Mojito application",
+    "version": "0.0.1",
+    "author": "",
+    "contributors": [
+          {
+              "name": "Your Name",
+              "email": "nobody@yahoo-inc.com"
+          }
+    ],
+    "scripts": {
+        "start": "mojito start"
+    },
+    "dependencies": {
+        "mojito": ">= 0.1.0"
+    },
+    "devDependencies": {},
+    "engines": {
+        "node": "*"
+    }
+}
