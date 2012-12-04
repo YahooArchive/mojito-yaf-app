@@ -22,4 +22,4 @@ YUI.add('MasterMojit', function (Y, NAME) {
         }
     };
 
-}, '0.0.1', {requires: ['dump']});
+}, '0.0.1', {requires: ['mojito-composite-addon', 'dump']});
