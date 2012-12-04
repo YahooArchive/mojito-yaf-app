@@ -1,0 +1,21 @@
+<div id="{{mojit_view_id}}" class="mojit wrap">
+  <div id="main" class="layout">
+    <div class="grid">
+      <ul class="layout">
+      {{#data}}
+      <li class="photo">
+      <a href="{{thumbUrl}}" data-id="{{image_id}}" data-large-url="{{largeUrl}}">
+          <img title="{{title}}" src="{{thumbUrl}}" alt="Thumbnail of a photo with title: {{title}}"/>
+        </a>
+      </li>
+      {{/data}}
+      </ul>
+    </div>
+  </div>
+  <div style="width: 50%; float: right">
+  <!-- load image here dynamically -->
+    <div id="display" style="margin: 0 auto;">
+      &nbsp;
+    </div>
+  </div>
+</div>
