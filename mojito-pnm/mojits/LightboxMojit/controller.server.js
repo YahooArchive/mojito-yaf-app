@@ -38,4 +38,4 @@ YUI.add('LightboxMojit', function (Y, NAME) {
         }
     };
 
-}, '0.0.1', {requires: ['dump']});
+}, '0.0.1', {requires: ['mojito-params-addon', 'dump']});

@@ -22,7 +22,7 @@ YUI.add('PhotosMojit', function (Y, NAME) {
         index: function(actionContext) {
             var page = 0,
                 start,
-                model = actionContext.models.PhotosMojitModel;
+                model = actionContext.models.get('PhotosMojitModel');
 
             if (actionContext.params.hasOwnProperty('merged')) {
                 page = actionContext.params.merged('page');
@@ -52,4 +52,4 @@ YUI.add('PhotosMojit', function (Y, NAME) {
         }
     };
 
-}, '0.0.1', {requires: ['dump']});
+}, '0.0.1', {requires: ['mojito-models-addon', 'mojito-params-addon', 'dump']});
