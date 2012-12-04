@@ -22,7 +22,8 @@ YUI.add('PhotosMojit', function (Y, NAME) {
         index: function(actionContext) {
             var page = 0,
                 start,
-                model = actionContext.models.get('PhotosMojitModel');
+                model = actionContext.models.PhotosMojitModel ||
+                    actionContext.models.get('PhotosMojitModel');
 
             if (actionContext.params.hasOwnProperty('merged')) {
                 page = actionContext.params.merged('page');
