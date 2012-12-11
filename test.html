@@ -68,7 +68,9 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
 
           //  !END TODO!
 
-          var app = new Y.mojito.App({instData: instanceMap});
+          var app = new Y.App();
+          new Y.mojito.Builder({instData: instanceMap, app: app});
+
           app.navigate('/');
 
           //  ---
