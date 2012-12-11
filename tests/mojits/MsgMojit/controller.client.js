@@ -8,7 +8,7 @@ YUI.add('MsgMojit', function (Y, NAME) {
 
     var MOJITO_NS = Y.namespace('mojito');
 
-    MOJITO_NS.MsgView = Y.Base.create('MsgView', MOJITO_NS.View, [],
+    MOJITO_NS.MsgMojitView = Y.Base.create('MsgMojitView', MOJITO_NS.View, [],
         {
             initializer: function () {
                 //  Regular Y.Lang sub template
@@ -22,7 +22,7 @@ YUI.add('MsgMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.MsgHandler = Y.Base.create('MsgHandler', MOJITO_NS.Handler, [],
+    MOJITO_NS.MsgMojitHandler = Y.Base.create('MsgMojitHandler', MOJITO_NS.Handler, [],
         {
             setupEventBindings: function () {
                 //  Make sure and set up the auto bindings
@@ -49,7 +49,7 @@ YUI.add('MsgMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.MsgModel = Y.Base.create('MsgModel', Y.Model, [Y.ModelSync.Local],
+    MOJITO_NS.MsgMojitModel = Y.Base.create('MsgMojitModel', Y.Model, [Y.ModelSync.Local],
         {
             root: 'mojito-test',
         }
@@ -57,16 +57,16 @@ YUI.add('MsgMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.MsgMojit = Y.Base.create('MsgMojit', MOJITO_NS.Mojit, [],
+    MOJITO_NS.MsgMojitController = Y.Base.create('MsgMojitController', MOJITO_NS.Controller, [],
         {
             initializer: function () {
                 var msgModel;
                 var msgView;
-               
-                msgModel = new MOJITO_NS.MsgModel({msg: 'Howdy!'});
+
+                msgModel = new MOJITO_NS.MsgMojitModel({msg: 'Howdy!'});
                 this.get('models')['msgHolder'] = msgModel;
 
-                msgView = new MOJITO_NS.MsgView({model: msgModel,
+                msgView = new MOJITO_NS.MsgMojitView({model: msgModel,
                                                     id: this.get('id'),
                                                     mojit: this});
                 msgView.set('templateEngine',
@@ -95,10 +95,10 @@ YUI.add('MsgMojit', function (Y, NAME) {
             }
         }, {
             ATTRS: {
-                mojitEvents: {value:
+                controllerEvents: {value:
                             ['mojit:index', 'mojit:setMsg', 'mojit:saveMsg',
                              'foo:fooEvent']},
-                handlerType: {value: MOJITO_NS.MsgHandler}
+                handlerType: {value: MOJITO_NS.MsgMojitHandler}
             }
         }
     );

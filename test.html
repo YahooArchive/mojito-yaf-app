@@ -34,17 +34,17 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
     </style>
 
     <!-- The fully minified version of YUI -->
+    <!--
     <script type="text/javascript"
       src="http://yui.yahooapis.com/3.7.2/build/yui/yui-min.js"></script>
+    -->
 
     <!-- The debug version of YUI -->
-    <!--
     <script type="text/javascript">
       //  Put YUI in debug mode so that we can step through it.
       YUI_config = {filter: 'debug', useConsoleOutput: true};
     </script>
     <script type="text/javascript" src="http://yui.yahooapis.com/3.7.2/build/yui/yui-debug.js"></script>
-    -->
 
     <script type="text/javascript" src="./lib/mojito-yaf.js"></script>
     <script type="text/javascript" src="./lib/mojits/HTMLMojit/controller.client.js"></script>
@@ -87,7 +87,7 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
 
           Y.one('#alertAllMojits').on('click',
             function () {
-              var stuff = Y.mojito.Mojit.findAllMojits();
+              var stuff = Y.mojito.Controller.findAllMojits();
               alert(Object.keys(stuff));
             });
         });

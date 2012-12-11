@@ -33,11 +33,11 @@ YUI.add('TestRootMojit', function (Y, NAME) {
 
     //  ---
 
-    MOJITO_NS.TestRootMojit = Y.Base.create('TestRootMojit', MOJITO_NS.Mojit, [],
+    MOJITO_NS.TestRootMojitController = Y.Base.create('TestRootMojit', MOJITO_NS.Controller, [],
         {
             initializer: function () {
                 var msgView;
-               
+
                 msgView = new MOJITO_NS.TestRootMojitView({id: this.get('id'),
                                                         mojit: this});
                 msgView.set('templateEngine',
@@ -52,12 +52,12 @@ YUI.add('TestRootMojit', function (Y, NAME) {
             },
 
             onMojitIndex: function (evt) {
-                console.log('got to TestRootMojit::index');
+                console.log('got to TestRootMojitController::index');
             }
 
         }, {
             ATTRS: {
-                mojitEvents: {value: ['mojit:index']},
+                controllerEvents: {value: ['mojit:index']},
                 handlerType: {value: MOJITO_NS.TestRootMojitHandler}
             }
         }
