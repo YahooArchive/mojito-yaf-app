@@ -26,7 +26,6 @@ YUI.add('TestRootMojit', function (Y, NAME) {
         {
         }, {
             ATTRS: {
-                routes: {value: [{route: '/', event: 'mojit:index'}]}
             }
         }
     );
@@ -58,7 +57,8 @@ YUI.add('TestRootMojit', function (Y, NAME) {
         }, {
             ATTRS: {
                 controllerEvents: {value: ['mojit:index']},
-                handlerType: {value: MOJITO_NS.TestRootMojitHandler}
+                handlerType: {value: MOJITO_NS.TestRootMojitHandler},
+                routes: {value: [{route: '/', event: 'mojit:index'}]}
             }
         }
     );

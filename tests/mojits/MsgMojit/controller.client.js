@@ -41,8 +41,7 @@ YUI.add('MsgMojit', function (Y, NAME) {
                 eventBindings: {value:
                                  [{selector: '#saveMsgButton',
                                    domEvent: 'click',
-                                   mojitEvent: 'mojit:saveMsg'}]},
-                routes: {value: [{route: '/foo', event: 'foo:fooEvent'}]}
+                                   mojitEvent: 'mojit:saveMsg'}]}
             }
         }
     );
@@ -90,15 +89,17 @@ YUI.add('MsgMojit', function (Y, NAME) {
                 this.get('models')['msgHolder'].save();
             },
 
-            onFooFooEvent: function (evt) {
-                console.log('got to "foo:fooEvent" event handler');
+            onFooBar: function (evt) {
+                console.log('got to "foo:bar" event handler');
             }
         }, {
             ATTRS: {
+                name: {value: 'msg'},
                 controllerEvents: {value:
                             ['mojit:index', 'mojit:setMsg', 'mojit:saveMsg',
-                             'foo:fooEvent']},
-                handlerType: {value: MOJITO_NS.MsgMojitHandler}
+                             'foo:bar']},
+                handlerType: {value: MOJITO_NS.MsgMojitHandler},
+                routes: {value: [{route: '/foo', event: 'foo:bar'}]}
             }
         }
     );
