@@ -7,7 +7,7 @@
     },
     "lightbox": {
         "verbs": ["get"],
-        "path": "/lightbox/show",
+        "path": "/lightbox/show/:largeUrl",
         "call": "lightbox.show"
     }
 }]
