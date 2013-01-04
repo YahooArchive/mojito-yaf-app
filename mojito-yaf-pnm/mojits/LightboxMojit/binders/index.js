@@ -12,43 +12,79 @@ YUI.add('LightboxMojitBinder', function (Y, NAME) {
     * @module LightboxMojitBinder 
     */
 
-    /**
-    * Constructor for the Binder class.
-    *
-    * @param mojitProxy {Object} The proxy to allow 
-    * the binder to interact with its owning mojit. 
-    * @class Binder
-    * @constructor     
-    */
-    Y.namespace('mojito.binders')[NAME] = {
-    /**
-    * Binder initialization method, invoked 
-    * after all binders on the page have 
-    * been constructed.    
-    */
-        init: function(mojitProxy) {
-            this.mojitProxy = mojitProxy;
+    var MOJITO_NS = Y.namespace('mojito');
 
-            //  Listen for the 'broadcast-detail-link' event. This will have
-            //  been fired when someone clicks on a picture in the photos view
-            //  and will bubble up from there to our master mojit.
-            this.mojitProxy.listen('broadcast-detail-link', function(payload) {
-
-                //  The photos view sent us the largeUrl and the title.
-                var largeUrl = payload.data.largeUrl;
-                var title = payload.data.title;
-
-                //  Tell the mojitProxy to refresh the view, using our largeUlr
-                //  and the title.
-                mojitProxy.refreshView({
-                    params: {
-                        url: {
-                            largeUrl: largeUrl,
-                            title: title
-                        }
-                    }
-                });
-            });
+    MOJITO_NS.LightboxMojitView = Y.Base.create('LightboxMojitView', MOJITO_NS.View, [],
+        {
+            initializer: function (params) {
+               //  Handlebars template¬
+               this.set('template', '<div class="lightbox"><div class="photo"><img src="{{largeUrl}}" alt="A photo titled: {{title}}" /><div class="photo-info"><h2 class="photo-title"><a href="{{pageUrl}}" title="View on Flickr">{{title}}</a></h2></div></div></div></div>');
+            }
         }
-    };
-}, '0.0.1', {requires: ['mojito-client']});
+    );
+
+    //  ---
+
+    MOJITO_NS.LightboxMojitHandler = Y.Base.create('LightboxMojitHandler', MOJITO_NS.Handler, [],
+        {
+            setupEventBindings: function () {
+                //  Make sure and set up the auto bindings
+                this.constructor.superclass.setupEventBindings.apply(
+                                                         this, arguments);
+            }
+        }, {
+            ATTRS: {
+                eventBindings: {value: []}
+            }
+        }
+    );
+
+    //  ---
+
+    MOJITO_NS.LightboxMojitModel = Y.Base.create('LightboxMojitModel', Y.Model, [],
+        {
+        }
+    );
+
+    //  ---
+
+    MOJITO_NS.LightboxMojitController = Y.Base.create('LightboxMojitController', MOJITO_NS.Controller, [],
+        {
+            initializer: function (params) {
+                var lightboxModel;
+                var lightboxView;
+
+                this.set('appObj', params.appObj);
+
+                lightboxModel = new MOJITO_NS.LightboxMojitModel({largeUrl: ''});
+                this.get('models')['urlHolder'] = lightboxModel;
+
+                lightboxView = new MOJITO_NS.LightboxMojitView(
+                                                {model: lightboxModel,
+                                                    id: this.get('id'),
+                                                    mojit: this});
+                lightboxView.set('templateEngine',
+                             new MOJITO_NS.Template(Y.Handlebars));
+                lightboxView.render();
+
+                this.addViewNamed(lightboxView, 'lightboxView');
+
+                this.setupEventObservations();
+            },
+
+            onLightboxShow: function (evt) {
+                this.get('models')['urlHolder'].set(
+                        'largeUrl', decodeURIComponent(evt.params.largeUrl));
+            },
+        }, {
+            ATTRS: {
+                name: {value: 'lightbox'},
+                controllerEvents: {value: ['lightbox:show']},
+                handlerType: {value: MOJITO_NS.LightboxMojitHandler},
+                routes: {value: []},
+                appObj: {value: null}
+            }
+        }
+    );
+
+}, '0.0.1', {requires: ['handlebars', 'mojito-yaf-client']});
