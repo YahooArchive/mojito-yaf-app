@@ -60,15 +60,98 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
 
           // !TODO! Hardcoded data in lieu of application.json / routes.json
           //  This is a hack for this test!
-          var instanceMap = {
-              'mainMojit' : 'mojito.HTMLMojit',
-              'rootMojit' : 'mojito.TestRootMojit',
-              'msgMojit' : 'mojito.MsgMojit'
-              };
+
+          var configData = {
+             "context":{
+             },
+             "binderMap":{
+                "mainMojit":{
+                   "base":null,
+                   "name":"HTMLMojitBinder",
+                   "action":"index",
+                   "config":{
+
+                   },
+                   "type":"HTMLMojit",
+                   "viewId":"mainMojit",
+                   "instanceId":"mainMojitA"
+                },
+                "rootMojit":{
+                   "base":null,
+                   "name":"TestRootMojitBinder",
+                   "action":"index",
+                   "config":{
+
+                   },
+                   "type":"mojito.TestRootMojit",
+                   "viewId":"rootMojit",
+                   "instanceId":"rootMojitA"
+                },
+                "msgMojit":{
+                   "base":null,
+                   "name":"MsgMojitBinder",
+                   "action":"index",
+                   "config":{
+
+                   },
+                   "type":"mojito.MsgMojit",
+                   "viewId":"msgMojit",
+                   "instanceId":"msgMojitA"
+                }
+             },
+             "routes":{
+                "root":{
+                   "verbs":{
+                      "GET":true
+                   },
+                   "path":"/",
+                   "call":"frame.index",
+                   "name":"root",
+                   "params":{
+
+                   },
+                   "regex":{
+
+                   },
+                   "query":{
+
+                   },
+                   "requires":{
+
+                   },
+                   "ext_match":"^/$",
+                   "int_match":"^$"
+                },
+                "msg":{
+                   "verbs":{
+                      "GET":true
+                   },
+                   "path":"/foo",
+                   "call":"foo.bar",
+                   "name":"msg",
+                   "params":{
+
+                   },
+                   "regex":{
+
+                   },
+                   "query":{
+
+                   },
+                   "requires":{
+
+                   },
+                   "ext_match":"^/foo$",
+                   "int_match":"^$"
+                }
+             }
+          };
 
           //  !END TODO!
 
-          var app = new Y.mojito.App({instData: instanceMap});
+          var app = new Y.App();
+          new Y.mojito.Builder({configData: configData, appObj: app});
+
           app.navigate('/');
 
           //  ---
@@ -85,7 +168,7 @@ NOTE: Copyright (C) 2012 Yahoo! Inc.
 
           Y.one('#alertAllMojits').on('click',
             function () {
-              var stuff = Y.mojito.Mojit.findAllMojits();
+              var stuff = Y.mojito.Controller.findAllControllers();
               alert(Object.keys(stuff));
             });
         });

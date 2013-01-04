@@ -1,6 +1,7 @@
 [
   {
     "settings": [ "master" ],
+    "useYAF": true,
     "specs": {
       "frame": {
         "type": "HTMLFrameMojit",
